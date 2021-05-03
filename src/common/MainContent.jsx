@@ -8,7 +8,8 @@ import { RiMenuFoldLine, RiMenuUnfoldLine } from 'react-icons/ri';
 import { selectSideBarSettings, toggleSideBarOpen } from '../features/appSlice';
 import ToolBar from './ToolBar';
 import CurrentDateWidget from '../components/widgets/CurrentDateWidget';
-import WidgetBase from '../components/WidgetBase';
+
+import WidgetsGrid from '../components/WidgetsGrid';
 
 const useStyles = makeStyles(() => ({
   content: {
@@ -46,9 +47,7 @@ function MainContent() {
               </IconButton>
               <CurrentDateWidget />
             </ToolBar>
-            <WidgetBase title="i am title">
-              Hi i am widgetHi i am widgetHi i am widgetHi i am widgetHi i am widget
-            </WidgetBase>
+            <WidgetsGrid />
           </>
         </Route>
         <Route path="/about">hi this is about page</Route>

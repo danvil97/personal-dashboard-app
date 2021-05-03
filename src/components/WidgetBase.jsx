@@ -5,11 +5,6 @@ import { RiBallPenLine, RiDragMoveFill } from 'react-icons/ri';
 
 const useStyles = makeStyles(() => ({
   root: {
-    backgroundColor: '#FCF9F9',
-    width: '208px',
-    height: '93px',
-    boxShadow: '-2px 2px 4px rgba(0, 0, 0, 0.25)',
-    borderRadius: '5px',
     padding: '8px',
   },
   widgetTitle: {
@@ -32,7 +27,7 @@ function WidgetBase({ children, title }) {
           <IconButton size="small">
             <RiBallPenLine />
           </IconButton>
-          <IconButton size="small">
+          <IconButton size="small" className="draggableHandle">
             <RiDragMoveFill />
           </IconButton>
         </div>
