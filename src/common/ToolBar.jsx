@@ -3,7 +3,12 @@ import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core';
 
 const useStyles = makeStyles(() => ({
-  root: { display: 'flex', alignItems: 'center', justifyContent: 'space-between' },
+  root: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: '20px',
+  },
 }));
 
 function ToolBar({ children }) {

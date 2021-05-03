@@ -7,7 +7,8 @@ import { RiMenuFoldLine, RiMenuUnfoldLine } from 'react-icons/ri';
 
 import { selectSideBarSettings, toggleSideBarOpen } from '../features/appSlice';
 import ToolBar from './ToolBar';
-import CurrentDateWidget from '../components/CurrentDateWidget';
+import CurrentDateWidget from '../components/widgets/CurrentDateWidget';
+import WidgetBase from '../components/WidgetBase';
 
 const useStyles = makeStyles(() => ({
   content: {
@@ -15,7 +16,7 @@ const useStyles = makeStyles(() => ({
     margin: '20px',
     borderRadius: 4,
     padding: '20px',
-    backgroundColor: '#E5E5E5',
+    backgroundColor: '#FFFFFF',
   },
   iconButton: {
     background: '#FBF7F7',
@@ -38,12 +39,17 @@ function MainContent() {
     <main className={classes.content}>
       <Switch>
         <Route exact path="/">
-          <ToolBar>
-            <IconButton className={classes.iconButton} onClick={handleSideBarToggle}>
-              {sideBarOpen ? <RiMenuFoldLine /> : <RiMenuUnfoldLine />}
-            </IconButton>
-            <CurrentDateWidget />
-          </ToolBar>
+          <>
+            <ToolBar>
+              <IconButton className={classes.iconButton} onClick={handleSideBarToggle}>
+                {sideBarOpen ? <RiMenuFoldLine /> : <RiMenuUnfoldLine />}
+              </IconButton>
+              <CurrentDateWidget />
+            </ToolBar>
+            <WidgetBase title="i am title">
+              Hi i am widgetHi i am widgetHi i am widgetHi i am widgetHi i am widget
+            </WidgetBase>
+          </>
         </Route>
         <Route path="/about">hi this is about page</Route>
       </Switch>
