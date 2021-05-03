@@ -1,4 +1,5 @@
 import React from 'react';
+import { nanoid } from '@reduxjs/toolkit';
 import { useDispatch, useSelector } from 'react-redux';
 import { Route, Switch } from 'react-router-dom';
 import { get } from 'lodash';
@@ -12,6 +13,7 @@ import CurrentDateWidget from '../components/widgets/CurrentDateWidget';
 import PrivateRoute from './PrivateRoute';
 import ToolBar from './ToolBar';
 
+import { addWidget } from '../features/widgetsSlice';
 import WidgetsGrid from '../components/WidgetsGrid';
 
 const useStyles = makeStyles(() => ({
@@ -41,7 +43,9 @@ function MainContent() {
     dispatch(toggleSideBarOpen());
   };
 
-  const handleAddNewWidget = () => {};
+  const handleAddNewWidget = () => {
+    dispatch(addWidget({ id: nanoid(), name: 'Basic' }));
+  };
 
   return (
     <main className={classes.content}>
