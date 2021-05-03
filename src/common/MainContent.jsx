@@ -41,9 +41,7 @@ function MainContent() {
     dispatch(toggleSideBarOpen());
   };
 
-  const handleAddNewWidget = () => {
-    console.log('adding:)');
-  };
+  const handleAddNewWidget = () => {};
 
   return (
     <main className={classes.content}>
