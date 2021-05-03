@@ -6,13 +6,23 @@ import { RiBallPenLine, RiDragMoveFill } from 'react-icons/ri';
 const useStyles = makeStyles(() => ({
   root: {
     padding: '8px',
+    '&:hover .widgetTools': {
+      display: 'block',
+    },
   },
   widgetTitle: {
     fontWeight: 'bold',
     fontSize: '16px',
   },
-  widgetToolbar: { display: 'flex', justifyContent: 'space-between', alignItems: 'center' },
-  widgetTools: {},
+  widgetToolbar: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    height: '25px',
+  },
+  widgetTools: {
+    display: 'none',
+  },
   widgetContent: { padding: '4px' },
 }));
 
@@ -23,7 +33,7 @@ function WidgetBase({ children, title }) {
     <div className={classes.root}>
       <div className={classes.widgetToolbar}>
         <div className={classes.widgetTitle}>{title}</div>
-        <div className={classes.widgetTools}>
+        <div className={`${classes.widgetTools} widgetTools`}>
           <IconButton size="small">
             <RiBallPenLine />
           </IconButton>

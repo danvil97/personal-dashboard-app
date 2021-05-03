@@ -18,6 +18,7 @@ const useStyles = makeStyles(() => ({
     borderRadius: 4,
     padding: '20px',
     backgroundColor: '#FFFFFF',
+    overflowY: 'auto',
   },
   iconButton: {
     background: '#FBF7F7',
