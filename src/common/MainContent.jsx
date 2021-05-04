@@ -5,7 +5,6 @@ import { Route, Switch } from 'react-router-dom';
 import { get } from 'lodash';
 import { makeStyles, IconButton } from '@material-ui/core';
 import { RiMenuFoldLine, RiMenuUnfoldLine } from 'react-icons/ri';
-import { MdAdd } from 'react-icons/md';
 
 import { selectSideBarSettings, toggleSideBarOpen } from '../features/appSlice';
 
@@ -15,6 +14,7 @@ import ToolBar from './ToolBar';
 
 import { addWidget } from '../features/widgetsSlice';
 import WidgetsGrid from '../components/WidgetsGrid';
+import AddWidget from '../components/AddWidget';
 
 const useStyles = makeStyles(() => ({
   content: {
@@ -43,8 +43,8 @@ function MainContent() {
     dispatch(toggleSideBarOpen());
   };
 
-  const handleAddNewWidget = () => {
-    dispatch(addWidget({ id: nanoid(), name: 'Basic' }));
+  const handleAddNewWidget = (widgetObject) => {
+    dispatch(addWidget({ id: nanoid(), ...widgetObject }));
   };
 
   return (
@@ -57,9 +57,7 @@ function MainContent() {
                 <IconButton className={classes.iconButton} onClick={handleSideBarToggle}>
                   {sideBarOpen ? <RiMenuFoldLine /> : <RiMenuUnfoldLine />}
                 </IconButton>
-                <IconButton className={classes.iconButton} onClick={handleAddNewWidget}>
-                  <MdAdd />
-                </IconButton>
+                <AddWidget addWidgetFunc={handleAddNewWidget} />
               </div>
               <CurrentDateWidget />
             </ToolBar>

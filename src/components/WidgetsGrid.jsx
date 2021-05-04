@@ -30,7 +30,6 @@ function WidgetsGrid() {
   const widgets = useSelector(selectWidgets);
 
   const handleLayoutChange = (newLayout) => {
-    console.log(newLayout);
     setLayout(newLayout);
     dispatch(updateWidgetGridSettings(newLayout));
   };
@@ -69,8 +68,6 @@ function WidgetsGrid() {
         const customMinMax = {
           x: 0,
           y: 0,
-          w: 1,
-          h: 2,
           ...widget.gridSettings,
         };
         const widgetContent = chooseWidget(widget.name);
