@@ -1,10 +1,10 @@
 import React from 'react';
+import { nanoid } from '@reduxjs/toolkit';
 import { useDispatch, useSelector } from 'react-redux';
 import { Route, Switch } from 'react-router-dom';
 import { get } from 'lodash';
 import { makeStyles, IconButton } from '@material-ui/core';
 import { RiMenuFoldLine, RiMenuUnfoldLine } from 'react-icons/ri';
-import { MdAdd } from 'react-icons/md';
 
 import { selectSideBarSettings, toggleSideBarOpen } from '../features/appSlice';
 
@@ -12,7 +12,9 @@ import CurrentDateWidget from '../components/widgets/CurrentDateWidget';
 import PrivateRoute from './PrivateRoute';
 import ToolBar from './ToolBar';
 
+import { addWidget } from '../features/widgetsSlice';
 import WidgetsGrid from '../components/WidgetsGrid';
+import AddWidget from '../components/AddWidget';
 
 const useStyles = makeStyles(() => ({
   content: {
@@ -41,7 +43,9 @@ function MainContent() {
     dispatch(toggleSideBarOpen());
   };
 
-  const handleAddNewWidget = () => {};
+  const handleAddNewWidget = (widgetObject) => {
+    dispatch(addWidget({ id: nanoid(), ...widgetObject }));
+  };
 
   return (
     <main className={classes.content}>
@@ -53,9 +57,7 @@ function MainContent() {
                 <IconButton className={classes.iconButton} onClick={handleSideBarToggle}>
                   {sideBarOpen ? <RiMenuFoldLine /> : <RiMenuUnfoldLine />}
                 </IconButton>
-                <IconButton className={classes.iconButton} onClick={handleAddNewWidget}>
-                  <MdAdd />
-                </IconButton>
+                <AddWidget addWidgetFunc={handleAddNewWidget} />
               </div>
               <CurrentDateWidget />
             </ToolBar>
