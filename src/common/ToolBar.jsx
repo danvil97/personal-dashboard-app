@@ -8,6 +8,8 @@ const useStyles = makeStyles(() => ({
     alignItems: 'center',
     justifyContent: 'space-between',
     marginBottom: '20px',
+    paddingBottom: '8px',
+    borderBottom: '1px solid #b2b2b2',
   },
 }));
 

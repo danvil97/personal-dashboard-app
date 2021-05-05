@@ -1,14 +1,15 @@
+/* eslint-disable react/jsx-props-no-spreading */
 import React from 'react';
 
-import SampleWidget from '../components/widgets/SampleWidget';
+import NoteWidget from '../components/widgets/NoteWidget';
 import CurrentWeatherWidget from '../components/widgets/CurrentWeatherWidget';
 
-function chooseWidget(name) {
+function chooseWidget(name, props) {
   switch (name) {
-    case 'Basic':
-      return <SampleWidget />;
+    case 'Note':
+      return <NoteWidget {...props} />;
     case 'CurrentWeather':
-      return <CurrentWeatherWidget />;
+      return <CurrentWeatherWidget {...props} />;
     default:
       return null;
   }

@@ -46,31 +46,13 @@ function WidgetsGrid() {
       draggableHandle=".draggableHandle"
       onLayoutChange={handleLayoutChange}
     >
-      {/* <div key="a" className={`${classes.gridItem} app-grid-item`}>
-        <WidgetBase title="i am title">
-          Hi i am widgetHi i am widgetHi i am widgetHi i am widgetHi i am widget
-        </WidgetBase>
-      </div>
-      <div
-        key="b"
-        data-grid={customMinMax}
-        className={`${classes.gridItem} app-grid-item`}
-        {...customMinMax}
-      >
-        <CurrentWeatherWidget />
-      </div>
-      <div key="c" className={`${classes.gridItem} app-grid-item`}>
-        <WidgetBase title="i am title">
-          Hi i am widgetHi i am widgetHi i am widgetHi i am widgetHi i am widget
-        </WidgetBase>
-      </div> */}
       {widgets.map((widget) => {
         const customMinMax = {
           x: 0,
           y: 0,
           ...widget.gridSettings,
         };
-        const widgetContent = chooseWidget(widget.name);
+        const widgetContent = chooseWidget(widget.name, { id: widget.id, ...widget });
         return (
           <div
             key={widget.id}

@@ -9,7 +9,7 @@ const useStyles = makeStyles(() => ({
   },
   profilePicture: {
     borderRadius: 50,
-    width: 60,
+    width: 40,
   },
   profileName: {
     fontWeight: 500,

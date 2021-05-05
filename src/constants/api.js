@@ -1,7 +1,6 @@
 /* 
 ! Weather API
 ? https://www.weatherapi.com/
-
 */
 const WEATHERAPI_KEY = 'd1bd5466856d4411ada214841213004';
 const WEATHERAPI_BASEURL = 'https://api.weatherapi.com/v1';

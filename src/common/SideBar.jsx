@@ -12,8 +12,9 @@ import { selectActiveUser, setActiveUser, setUserLogOut } from '../features/user
 
 import { auth, provider } from '../firebase';
 import MenuItemButton from './MenuItemButton';
+import logoSVG from '../assets/logo.svg';
 
-const SIDE_PANEL_WIDTH = 240;
+const SIDE_PANEL_WIDTH = 160;
 const useStyles = makeStyles((theme) => ({
   drawer: {
     width: SIDE_PANEL_WIDTH,
@@ -21,13 +22,13 @@ const useStyles = makeStyles((theme) => ({
     whiteSpace: 'nowrap',
   },
   drawerPaper: {
-    marginTop: '20px',
+    marginTop: '26px',
     backgroundColor: '#152459',
     padding: '20px 8px',
     color: '#F5F5F5',
     justifyContent: 'space-between',
     alignItems: 'center',
-    height: '92%',
+    height: '93%',
   },
   drawerOpen: {
     width: SIDE_PANEL_WIDTH,
@@ -43,9 +44,9 @@ const useStyles = makeStyles((theme) => ({
       duration: theme.transitions.duration.leavingScreen,
     }),
     overflowX: 'hidden',
-    width: theme.spacing(7) + 1,
+    width: theme.spacing(4) + 1,
     [theme.breakpoints.up('sm')]: {
-      width: theme.spacing(9) + 1,
+      width: theme.spacing(4) + 1,
     },
   },
   menuItem: {
@@ -54,6 +55,9 @@ const useStyles = makeStyles((theme) => ({
   menuItems: {
     display: 'flex',
     flexDirection: 'column',
+  },
+  monoLogoImg: {
+    '& img': { padding: '4px', borderRadius: 5, backgroundColor: 'white', width: '30px' },
   },
 }));
 
@@ -140,7 +144,12 @@ function SideBar() {
           </MenuItemButton>
         )}
       </div>
-      <div>mono view.</div>
+      {sideBarOpen && <div className={classes.monoLogo}>mono view.</div>}
+      {!sideBarOpen && (
+        <div className={classes.monoLogoImg}>
+          <img src={logoSVG} alt="logo" />
+        </div>
+      )}
     </Drawer>
   );
 }

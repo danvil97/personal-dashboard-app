@@ -21,10 +21,23 @@ const widgetSlice = createSlice({
         },
       }));
     },
+    updateWidget: (state, action) => {
+      state.addedWidgets = state.addedWidgets.map((widget) =>
+        widget.id === action.payload.id ? { ...widget, ...action.payload } : widget
+      );
+    },
+    removeWidget: (state, action) => {
+      state.addedWidgets = state.addedWidgets.filter(({ id }) => id !== action.payload.id);
+    },
   },
 });
 
-export const { addWidget, updateWidgetGridSettings } = widgetSlice.actions;
+export const {
+  addWidget,
+  updateWidgetGridSettings,
+  updateWidget,
+  removeWidget,
+} = widgetSlice.actions;
 
 export const selectWidgets = (state) => state.widgets.addedWidgets;
 export const selectWidgetsStatus = (state) => state.widgets.isLoading;

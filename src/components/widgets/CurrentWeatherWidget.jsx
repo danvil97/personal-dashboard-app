@@ -11,7 +11,7 @@ import {
   selectCurrentWeatherData,
   selectWeatherStatus,
 } from '../../features/weatherSlice';
-import WidgetBase from '../WidgetBase';
+import WidgetToolbar from '../WidgetToolbar';
 
 const useStyles = makeStyles(() => ({
   rootLoaded: {
@@ -57,7 +57,8 @@ function CurrentWeatherWidget() {
   }, [dispatch]);
 
   return (
-    <WidgetBase title="Current Weather">
+    <div className="commonWidget">
+      <WidgetToolbar title="Current Weather" />
       {status.isLoading || !data ? (
         <CircularProgress />
       ) : (
@@ -86,7 +87,7 @@ function CurrentWeatherWidget() {
           </div>
         </div>
       )}
-    </WidgetBase>
+    </div>
   );
 }
 
