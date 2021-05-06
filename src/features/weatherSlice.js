@@ -68,7 +68,7 @@ export function fetchCurrentWeather() {
             feelslike_c: res.data.current.feelslike_c,
             feelslike_f: res.data.current.feelslike_f,
             updatedTime: res.data.current.last_updated,
-            place: `${res.data.location.country}, ${res.data.location.name}`,
+            place: `${res.data.location.country}, ${res.data.location.region}, ${res.data.location.name}`,
             icon: { img: res.data.current.condition.icon, alt: res.data.current.condition.text },
           };
           dispatch(getCurrentWeatherSuccess(weatherData));
