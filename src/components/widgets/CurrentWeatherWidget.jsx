@@ -1,5 +1,6 @@
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 import React, { useEffect } from 'react';
+import PropTypes from 'prop-types';
 import { CircularProgress, makeStyles } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
 import { MdUpdate } from 'react-icons/md';
@@ -10,6 +11,8 @@ import {
   fetchCurrentWeather,
   selectCurrentWeatherData,
   selectWeatherStatus,
+  setCurrentLocationViaGeolocation,
+  selectCurrentLocation,
 } from '../../features/weatherSlice';
 import WidgetToolbar from '../WidgetToolbar';
 
@@ -42,26 +45,32 @@ const useStyles = makeStyles(() => ({
     justifyContent: 'space-between',
   },
 }));
-function CurrentWeatherWidget() {
+function CurrentWeatherWidget({ id }) {
   const classes = useStyles();
   const dispatch = useDispatch();
+
   const data = useSelector(selectCurrentWeatherData);
+  const currentLocation = useSelector(selectCurrentLocation);
   const status = useSelector(selectWeatherStatus);
 
   const updateData = () => {
     dispatch(fetchCurrentWeather());
   };
 
+  const setLocation = () => {
+    dispatch(setCurrentLocationViaGeolocation());
+  };
+
   useEffect(() => {
     dispatch(fetchCurrentWeather());
-  }, [dispatch]);
+  }, [dispatch, currentLocation]);
 
   return (
     <div className="commonWidget">
-      <WidgetToolbar title="Current Weather" />
-      {status.isLoading || !data ? (
-        <CircularProgress />
-      ) : (
+      <WidgetToolbar title="Current Weather" id={id} onEdit={setLocation} />
+      {status.isLoading && <CircularProgress />}
+      {!currentLocation && <div>Please update your location settings!</div>}
+      {!status.isLoading && data && (
         <div>
           <div className={classes.rootLoaded}>
             <img src={data.icon.img} alt={data.icon.alt} />
@@ -90,5 +99,7 @@ function CurrentWeatherWidget() {
     </div>
   );
 }
-
+CurrentWeatherWidget.propTypes = {
+  id: PropTypes.string.isRequired,
+};
 export default CurrentWeatherWidget;

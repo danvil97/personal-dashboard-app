@@ -30,9 +30,11 @@ function WidgetToolbar({ title, id, onEdit, onRemove, isDraggable }) {
   const classes = useStyles();
   const dispatch = useDispatch();
 
-  const handleRemove = () => {
-    dispatch(removeWidget({ id }));
-  };
+  const handleRemove =
+    onRemove ||
+    (() => {
+      dispatch(removeWidget({ id }));
+    });
 
   return (
     <div className={classes.root}>
@@ -43,7 +45,7 @@ function WidgetToolbar({ title, id, onEdit, onRemove, isDraggable }) {
             <RiBallPenLine />
           </IconButton>
         )}
-        <IconButton size="small" onClick={onRemove || handleRemove}>
+        <IconButton size="small" onClick={handleRemove}>
           <TiDeleteOutline />
         </IconButton>
         {isDraggable && (

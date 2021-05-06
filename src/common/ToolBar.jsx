@@ -18,6 +18,8 @@ function ToolBar({ children }) {
   return <div className={classes.root}>{children}</div>;
 }
 
-ToolBar.propTypes = { children: PropTypes.element.isRequired };
+ToolBar.propTypes = {
+  children: PropTypes.oneOfType([PropTypes.element, PropTypes.array]).isRequired,
+};
 
 export default ToolBar;
