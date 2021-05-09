@@ -11,7 +11,7 @@ import {
 } from 'react-icons/ri';
 import { CgProfile } from 'react-icons/cg';
 import { Drawer, makeStyles } from '@material-ui/core';
-import { selectSideBarSettings } from '../features/appSlice';
+import { openSettingsModal, selectSideBarSettings } from '../features/appSlice';
 import UserProfilePreview from '../components/UserProfilePreview';
 import { selectActiveUser, setActiveUser, setUserLogOut } from '../features/userSlice';
 
@@ -94,6 +94,10 @@ function SideBar() {
     auth.signOut().then(dispatch(setUserLogOut()));
   };
 
+  const openSettings = () => {
+    dispatch(openSettingsModal());
+  };
+
   return (
     <Drawer
       variant="permanent"
@@ -140,6 +144,7 @@ function SideBar() {
               className={classes.menuItem}
               iconComponent={<RiSettings3Line />}
               iconOnly={!sideBarOpen}
+              onClickHandler={openSettings}
             >
               Settings
             </MenuItemButton>

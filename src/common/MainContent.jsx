@@ -15,6 +15,7 @@ import ToolBar from './ToolBar';
 import { addWidget } from '../features/widgetsSlice';
 import WidgetsGrid from '../components/WidgetsGrid';
 import AddWidget from '../components/AddWidget';
+import SettingsModal from '../components/SettingsModal';
 
 const useStyles = makeStyles(() => ({
   content: {
@@ -37,6 +38,7 @@ function MainContent() {
   const dispatch = useDispatch();
 
   const sideBarSettings = useSelector(selectSideBarSettings);
+
   const sideBarOpen = get(sideBarSettings, 'isOpen');
 
   const handleSideBarToggle = () => {
@@ -66,6 +68,7 @@ function MainContent() {
         </PrivateRoute>
         <Route path="/about">hi this is about page</Route>
       </Switch>
+      <SettingsModal />
     </main>
   );
 }
