@@ -20,14 +20,16 @@ const useStyles = makeStyles(() => ({
     boxShadow: '-2px 2px 4px rgba(0, 0, 0, 0.25)',
     borderRadius: '5px',
     margin: '8px',
+    overflowY: 'hidden',
   },
 }));
 
 function WidgetsGrid() {
-  const [layout, setLayout] = useState();
   const classes = useStyles();
+
   const dispatch = useDispatch();
   const widgets = useSelector(selectWidgets);
+  const [layout, setLayout] = useState();
 
   const handleLayoutChange = (newLayout) => {
     setLayout(newLayout);
