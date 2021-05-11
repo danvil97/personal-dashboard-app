@@ -1,15 +1,17 @@
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 import axios from 'axios';
-import { CircularProgress, makeStyles } from '@material-ui/core';
-import { useDispatch } from 'react-redux';
+import { CircularProgress, IconButton, makeStyles } from '@material-ui/core';
+
 import { MdUpdate } from 'react-icons/md';
 import { RiWindyLine } from 'react-icons/ri';
 import { WiHumidity } from 'react-icons/wi';
 import { FaTemperatureLow } from 'react-icons/fa';
-import WidgetToolbar from '../WidgetToolbar';
+import { TiLocationArrowOutline } from 'react-icons/ti';
 
+import WidgetToolbar from '../WidgetToolbar';
 import { WeatherAPI } from '../../constants/api';
 import { updateWidget } from '../../features/widgetsSlice';
 import { locationToString } from '../../utils/weatherUtils';
@@ -49,17 +51,21 @@ function CurrentWeatherWidget({ id, settings }) {
   const [data, setData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  const setLocation = () => {
+  const setLocation = (location) => {
+    dispatch(
+      updateWidget({
+        id,
+        settings: {
+          ...settings,
+          location,
+        },
+      })
+    );
+  };
+
+  const setLocationUsingGeolocation = () => {
     navigator.geolocation.getCurrentPosition((position) => {
-      dispatch(
-        updateWidget({
-          id,
-          settings: {
-            ...settings,
-            location: { latitude: position.coords.latitude, longitude: position.coords.longitude },
-          },
-        })
-      );
+      setLocation({ latitude: position.coords.latitude, longitude: position.coords.longitude });
     });
   };
 
@@ -109,9 +115,15 @@ function CurrentWeatherWidget({ id, settings }) {
     getCurrentWeather();
   }, [settings]);
 
+  const customTools = [
+    <IconButton size="small" onClick={setLocationUsingGeolocation}>
+      <TiLocationArrowOutline />
+    </IconButton>,
+  ];
+
   return (
     <div className="commonWidget">
-      <WidgetToolbar title="Current Weather" id={id} onEdit={setLocation} />
+      <WidgetToolbar id={id} title="Current Weather" customTools={customTools} />
       {isLoading && <CircularProgress />}
       {!settings.location && <div>Please update your location settings!</div>}
       {!isLoading && settings.location && data && (

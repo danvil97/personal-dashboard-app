@@ -21,8 +21,8 @@ const appSlice = createSlice({
   },
 });
 
-export const selectSideBarSettings = (state) => state.appSettings.sideBar;
-export const selectSettingsModalSettings = (state) => state.appSettings.settingsModal;
+export const selectSideBarSettings = (state) => state.app.sideBar;
+export const selectSettingsModalSettings = (state) => state.app.settingsModal;
 
 export const { toggleSideBarOpen, openSettingsModal, closeSettingsModal } = appSlice.actions;
 export default appSlice.reducer;

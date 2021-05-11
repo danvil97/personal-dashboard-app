@@ -6,7 +6,7 @@ import widgetsReducer from './features/widgetsSlice';
 
 const store = configureStore({
   reducer: {
-    appSettings: appReducer,
+    app: appReducer,
     user: userReducer,
     widgets: widgetsReducer,
   },

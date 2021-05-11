@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { IconButton, makeStyles } from '@material-ui/core';
-import { RiBallPenLine, RiDragMoveFill } from 'react-icons/ri';
+import { RiDragMoveFill } from 'react-icons/ri';
 import { TiDeleteOutline } from 'react-icons/ti';
 import { useDispatch } from 'react-redux';
 import { removeWidget } from '../features/widgetsSlice';
@@ -26,7 +26,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-function WidgetToolbar({ title, id, onEdit, onRemove, isDraggable }) {
+function WidgetToolbar({ title, id, onRemove, isDraggable, customTools }) {
   const classes = useStyles();
   const dispatch = useDispatch();
 
@@ -40,11 +40,7 @@ function WidgetToolbar({ title, id, onEdit, onRemove, isDraggable }) {
     <div className={classes.root}>
       <div className={classes.widgetTitle}>{title}</div>
       <div className={`${classes.widgetTools} widgetTools`}>
-        {onEdit && (
-          <IconButton size="small" onClick={onEdit}>
-            <RiBallPenLine />
-          </IconButton>
-        )}
+        {customTools && customTools.map((ct) => ct)}
         <IconButton size="small" onClick={handleRemove}>
           <TiDeleteOutline />
         </IconButton>
@@ -59,17 +55,17 @@ function WidgetToolbar({ title, id, onEdit, onRemove, isDraggable }) {
 }
 
 WidgetToolbar.propTypes = {
-  title: PropTypes.string,
   id: PropTypes.string.isRequired,
-  onEdit: PropTypes.func,
+  title: PropTypes.string,
   onRemove: PropTypes.func,
   isDraggable: PropTypes.bool,
+  customTools: PropTypes.arrayOf(PropTypes.any),
 };
 WidgetToolbar.defaultProps = {
   title: null,
-  onEdit: null,
   onRemove: null,
   isDraggable: true,
+  customTools: [],
 };
 
 export default WidgetToolbar;

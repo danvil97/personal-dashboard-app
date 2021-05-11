@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
-import { makeStyles, TextField } from '@material-ui/core';
+import { RiBallPenLine } from 'react-icons/ri';
+import { IconButton, makeStyles, TextField } from '@material-ui/core';
 
 import WidgetToolbar from '../WidgetToolbar';
 import { updateWidget } from '../../features/widgetsSlice';
@@ -37,9 +38,15 @@ function NoteWidget({ text, id }) {
     setIsEditingMode(true);
   };
 
+  const customTools = [
+    <IconButton size="small" onClick={onEdit}>
+      <RiBallPenLine />
+    </IconButton>,
+  ];
+
   return (
     <div className="commonWidget">
-      <WidgetToolbar title="Note" onEdit={onEdit} id={id} />
+      <WidgetToolbar title="Note" onEdit={onEdit} id={id} customTools={customTools} />
       <div className={classes.noteText}>
         {isEditingMode ? (
           <TextField
