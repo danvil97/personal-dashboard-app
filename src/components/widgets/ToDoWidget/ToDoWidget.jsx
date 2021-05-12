@@ -33,7 +33,7 @@ function ToDoWidget({ id, todoList }) {
   };
 
   const customTools = [
-    <IconButton size="small" onClick={addNewTodo}>
+    <IconButton size="small" onClick={addNewTodo} key="0">
       <MdAdd />
     </IconButton>,
   ];
@@ -44,6 +44,7 @@ function ToDoWidget({ id, todoList }) {
         {todoList.map((todo) => (
           <ToDoItem
             id={todo.id}
+            key={todo.id}
             text={todo.text}
             isCompleted={todo.isCompleted}
             toggleTodo={onToggleTodo(todo.id)}

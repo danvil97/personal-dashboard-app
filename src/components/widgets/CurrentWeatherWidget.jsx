@@ -116,7 +116,7 @@ function CurrentWeatherWidget({ id, settings }) {
   }, [settings]);
 
   const customTools = [
-    <IconButton size="small" onClick={setLocationUsingGeolocation}>
+    <IconButton size="small" onClick={setLocationUsingGeolocation} key="0">
       <TiLocationArrowOutline />
     </IconButton>,
   ];

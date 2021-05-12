@@ -12,7 +12,7 @@ const PrivateRoute = ({ children, ...restProps }) => {
 };
 
 PrivateRoute.propTypes = {
-  children: PropTypes.string,
+  children: PropTypes.oneOfType([PropTypes.element, PropTypes.string]),
 };
 
 PrivateRoute.defaultProps = {

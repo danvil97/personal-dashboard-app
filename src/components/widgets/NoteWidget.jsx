@@ -39,7 +39,7 @@ function NoteWidget({ text, id }) {
   };
 
   const customTools = [
-    <IconButton size="small" onClick={onEdit}>
+    <IconButton size="small" onClick={onEdit} key="0">
       <RiBallPenLine />
     </IconButton>,
   ];
