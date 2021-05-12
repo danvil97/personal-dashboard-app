@@ -8,12 +8,12 @@ const useStyles = makeStyles(() => ({
   removeButton: { marginLeft: 'auto', display: 'none' },
 }));
 
-function ToDoItem({ id, text, isCompleted, onComplete, onRemove }) {
+function ToDoItem({ id, text, isCompleted, toggleTodo, onRemove }) {
   const classes = useStyles();
   return (
     <div className={classes.todoItem} key={id}>
       <FormControlLabel
-        control={<Checkbox checked={isCompleted} onChange={onComplete} />}
+        control={<Checkbox color="primary" checked={isCompleted} onChange={toggleTodo} />}
         label={text}
       />
       <IconButton
@@ -31,7 +31,7 @@ ToDoItem.propTypes = {
   id: PropTypes.string.isRequired,
   text: PropTypes.string.isRequired,
   isCompleted: PropTypes.bool.isRequired,
-  onComplete: PropTypes.func.isRequired,
+  toggleTodo: PropTypes.func.isRequired,
   onRemove: PropTypes.func.isRequired,
 };
 

@@ -29,6 +29,26 @@ const widgetSlice = createSlice({
     removeWidget: (state, action) => {
       state.addedWidgets = state.addedWidgets.filter(({ id }) => id !== action.payload.id);
     },
+    // todo widget actions
+    addTodo: (state, action) => {
+      const { id, newTodo } = action.payload;
+      const currentWidget = state.addedWidgets.find((widget) => widget.id === id);
+
+      currentWidget.todoList.push({ ...newTodo });
+    },
+    toggleTodo: (state, action) => {
+      const { id, todoId } = action.payload;
+      const currentWidget = state.addedWidgets.find((widget) => widget.id === id);
+      const currentTodo = currentWidget.todoList.find((todo) => todo.id === todoId);
+
+      currentTodo.isCompleted = !currentTodo.isCompleted;
+    },
+    removeTodo: (state, action) => {
+      const { id, todoId } = action.payload;
+      const currentWidget = state.addedWidgets.find((widget) => widget.id === id);
+
+      currentWidget.todoList = currentWidget.todoList.filter((todo) => todo.id !== todoId);
+    },
   },
 });
 
@@ -37,6 +57,9 @@ export const {
   updateWidgetGridSettings,
   updateWidget,
   removeWidget,
+  addTodo,
+  removeTodo,
+  toggleTodo,
 } = widgetSlice.actions;
 
 export const selectWidgets = (state) => state.widgets.addedWidgets;

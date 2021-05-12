@@ -1,42 +1,53 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
+import { nanoid } from '@reduxjs/toolkit';
 import { MdAdd } from 'react-icons/md';
 import { IconButton, makeStyles } from '@material-ui/core';
 
 import WidgetToolbar from '../../WidgetToolbar';
-import { updateWidget } from '../../../features/widgetsSlice';
+import { addTodo, toggleTodo, removeTodo } from '../../../features/widgetsSlice';
 import ToDoItem from './ToDoItem';
 
 const useStyles = makeStyles(() => ({ todoList: {} }));
 
-function ToDoWidget({ id, toDoData }) {
+function ToDoWidget({ id, todoList }) {
   const dispatch = useDispatch();
   const classes = useStyles();
 
-  const addNew = () => {
-    dispatch(updateWidget());
+  const addNewTodo = () => {
+    const newTodo = {
+      id: nanoid(),
+      text: 'Sample',
+      isCompleted: false,
+    };
+    dispatch(addTodo({ id, newTodo }));
+  };
+
+  const onToggleTodo = (todoId) => () => {
+    dispatch(toggleTodo({ id, todoId }));
+  };
+
+  const onRemove = (todoId) => () => {
+    dispatch(removeTodo({ id, todoId }));
   };
 
   const customTools = [
-    <IconButton size="small" onClick={addNew}>
+    <IconButton size="small" onClick={addNewTodo}>
       <MdAdd />
     </IconButton>,
   ];
-  const onComplete = () => {};
-  const onRemove = () => {};
-
   return (
     <div className="commonWidget">
       <WidgetToolbar title="Todo" id={id} customTools={customTools} />
       <div className={classes.todoList}>
-        {toDoData.map((todo) => (
+        {todoList.map((todo) => (
           <ToDoItem
             id={todo.id}
             text={todo.text}
             isCompleted={todo.isCompleted}
-            onComplete={onComplete}
-            onRemove={onRemove}
+            toggleTodo={onToggleTodo(todo.id)}
+            onRemove={onRemove(todo.id)}
           />
         ))}
       </div>
@@ -45,7 +56,7 @@ function ToDoWidget({ id, toDoData }) {
 }
 
 ToDoWidget.propTypes = {
-  toDoData: PropTypes.arrayOf(
+  todoList: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string,
       text: PropTypes.string,
@@ -56,7 +67,7 @@ ToDoWidget.propTypes = {
 };
 
 ToDoWidget.defaultProps = {
-  toDoData: [
+  todoList: [
     { id: '1', text: 'sample', isCompleted: false },
     { id: '2', text: 'sample completed', isCompleted: true },
   ],

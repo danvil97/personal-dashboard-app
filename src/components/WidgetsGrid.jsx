@@ -1,4 +1,3 @@
-/* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable import/no-extraneous-dependencies */
 import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core';
@@ -17,7 +16,7 @@ const ReactGridLayout = WidthProvider(Responsive);
 const useStyles = makeStyles(() => ({
   gridItem: {
     backgroundColor: '#FCF9F9',
-    boxShadow: '-2px 2px 4px rgba(0, 0, 0, 0.25)',
+    boxShadow: '0px 0px 3px 0px rgb(0 0 0 / 25%)',
     borderRadius: '5px',
     margin: '8px',
     overflowY: 'hidden',

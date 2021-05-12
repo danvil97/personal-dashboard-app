@@ -11,5 +11,6 @@ export default [
   {
     name: TODO_WIDGET,
     gridSettings: { w: 1, h: 2, minW: 1, minH: 2, maxW: 1, maxH: 2 },
+    todoList: [],
   },
 ];

@@ -59,7 +59,7 @@ function SettingsModal() {
         </div>
       </DialogTitle>
       <DialogContent dividers>
-        <Typography gutterBottom>Setting #1</Typography>
+        <Typography gutterBottom>Time & Date format</Typography>
       </DialogContent>
       <DialogActions>
         <Button autoFocus onClick={handleClose} color="primary">
