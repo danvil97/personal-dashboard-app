@@ -135,11 +135,11 @@ function CurrentWeatherWidget({ id, settings }) {
             </p>
             <div className={classes.additionalInfo}>
               <div className={classes.property}>
-                <FaTemperatureLow size="1.2em" />{' '}
+                <FaTemperatureLow size="1.2em" />
                 {settings.prefferedTemp === 'C' ? `${data.feelslike_c}°С` : `${data.feelslike_f}°F`}
               </div>
               <div className={classes.property}>
-                <RiWindyLine size="1.2em" />{' '}
+                <RiWindyLine size="1.2em" />
                 {settings.speedUnits === 'kph' ? `${data.wind_kph} kph` : `${data.wind_mph} mph`}
               </div>
               <div className={classes.property}>
