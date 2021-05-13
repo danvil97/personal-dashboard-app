@@ -74,6 +74,7 @@ function ToDoWidget({ id, todoList }) {
                     }}
                     size="small"
                     className={`${classes.removeButton} todo-removeButton`}
+                    disabled={!newTodoText}
                   >
                     <RiCheckLine />
                   </IconButton>

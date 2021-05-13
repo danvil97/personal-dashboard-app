@@ -4,6 +4,7 @@ import React from 'react';
 import NoteWidget from '../components/widgets/NoteWidget';
 import CurrentWeatherWidget from '../components/widgets/CurrentWeatherWidget';
 import ToDoWidget from '../components/widgets/ToDoWidget/ToDoWidget';
+import PomodoroWidget from '../components/widgets/PomodoroWidget';
 
 function chooseWidget(name, props) {
   switch (name) {
@@ -13,6 +14,8 @@ function chooseWidget(name, props) {
       return <CurrentWeatherWidget {...props} />;
     case 'ToDo':
       return <ToDoWidget {...props} />;
+    case 'Pomodoro':
+      return <PomodoroWidget {...props} />;
     default:
       return null;
   }

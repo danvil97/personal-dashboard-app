@@ -9,6 +9,7 @@ const widgetSlice = createSlice({
   name: 'widgets',
   initialState,
   reducers: {
+    //! common widget actions
     addWidget: (state, action) => {
       state.addedWidgets = [...state.addedWidgets, action.payload];
     },
@@ -29,7 +30,7 @@ const widgetSlice = createSlice({
     removeWidget: (state, action) => {
       state.addedWidgets = state.addedWidgets.filter(({ id }) => id !== action.payload.id);
     },
-    // todo widget actions
+    //! todo widget actions
     addTodo: (state, action) => {
       const { id, newTodo } = action.payload;
       const currentWidget = state.addedWidgets.find((widget) => widget.id === id);
@@ -49,6 +50,22 @@ const widgetSlice = createSlice({
 
       currentWidget.todoList = currentWidget.todoList.filter((todo) => todo.id !== todoId);
     },
+    //! pomodoro widget actions
+    changePomodoroSettings: (state, action) => {
+      const { id } = action.payload;
+      const currentWidget = state.addedWidgets.find((widget) => widget.id === id);
+
+      currentWidget.settings = { ...currentWidget.settings, ...action.payload.updatedSettings };
+    },
+    changePomodoroTimers: (state, action) => {
+      const { id } = action.payload;
+      const currentWidget = state.addedWidgets.find((widget) => widget.id === id);
+
+      currentWidget.settings.timers = {
+        ...currentWidget.settings.timers,
+        ...action.payload.updatedTimers,
+      };
+    },
   },
 });
 
@@ -60,6 +77,8 @@ export const {
   addTodo,
   removeTodo,
   toggleTodo,
+  changePomodoroSettings,
+  changePomodoroTimers,
 } = widgetSlice.actions;
 
 export const selectWidgets = (state) => state.widgets.addedWidgets;
