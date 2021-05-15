@@ -19,8 +19,7 @@ export default [
     gridSettings: { w: 1, h: 2, minW: 1, minH: 2, maxW: 1, maxH: 2 },
     settings: {
       pomodoroCount: 0,
-      beforeLongBreak: 4,
-      timers: { pomodoro: 25, shortBreak: 5, longBreak: 15 },
+      timers: { work: 25, break: 5 },
     },
   },
 ];
