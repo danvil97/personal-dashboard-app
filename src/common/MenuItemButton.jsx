@@ -17,7 +17,7 @@ MenuItemButton.propTypes = {
   iconComponent: PropTypes.element.isRequired,
   className: PropTypes.string,
   onClickHandler: PropTypes.func,
-  children: PropTypes.element,
+  children: PropTypes.oneOfType([PropTypes.element, PropTypes.string]),
   iconOnly: PropTypes.bool,
 };
 MenuItemButton.defaultProps = {

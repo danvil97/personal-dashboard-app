@@ -8,6 +8,8 @@ const useStyles = makeStyles(() => ({
     alignItems: 'center',
     justifyContent: 'space-between',
     marginBottom: '20px',
+    paddingBottom: '8px',
+    borderBottom: '1px solid #b2b2b2',
   },
 }));
 
@@ -16,6 +18,8 @@ function ToolBar({ children }) {
   return <div className={classes.root}>{children}</div>;
 }
 
-ToolBar.propTypes = { children: PropTypes.element.isRequired };
+ToolBar.propTypes = {
+  children: PropTypes.oneOfType([PropTypes.element, PropTypes.array]).isRequired,
+};
 
 export default ToolBar;

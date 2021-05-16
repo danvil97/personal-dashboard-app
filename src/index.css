@@ -15,3 +15,8 @@ body,
   background: #152459;
   overflow-x: hidden;
 }
+
+/* Common widget styles */
+.commonWidget {
+  padding: 8px;
+}

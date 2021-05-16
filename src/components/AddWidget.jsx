@@ -39,17 +39,12 @@ function AddWidget({ addWidgetFunc }) {
         keepMounted
         open={Boolean(anchorEl)}
         onClose={handleClose}
-        anchorOrigin={{
-          vertical: 'center',
-          horizontal: 'center',
-        }}
-        transformOrigin={{
-          vertical: 'center',
-          horizontal: 'center',
-        }}
       >
-        {WIDGET_LIST.map((widget) => (
-          <MenuItem onClick={() => handleAddNewWidget(widget)}>{widget.name}</MenuItem>
+        {WIDGET_LIST.map((widget, idx) => (
+          // eslint-disable-next-line react/no-array-index-key
+          <MenuItem onClick={() => handleAddNewWidget(widget)} key={idx}>
+            {widget.name}
+          </MenuItem>
         ))}
       </Menu>
     </>

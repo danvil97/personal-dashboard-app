@@ -3,17 +3,23 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import clsx from 'clsx';
 import { get } from 'lodash';
-import { RiLogoutBoxLine, RiSettings3Line, RiQuestionnaireLine } from 'react-icons/ri';
+import {
+  RiLogoutBoxLine,
+  RiLoginBoxLine,
+  RiSettings3Line,
+  RiQuestionnaireLine,
+} from 'react-icons/ri';
 import { CgProfile } from 'react-icons/cg';
-import { Button, Drawer, makeStyles } from '@material-ui/core';
-import { selectSideBarSettings } from '../features/appSlice';
+import { Drawer, makeStyles } from '@material-ui/core';
+import { openSettingsModal, selectSideBarSettings } from '../features/appSlice';
 import UserProfilePreview from '../components/UserProfilePreview';
 import { selectActiveUser, setActiveUser, setUserLogOut } from '../features/userSlice';
 
 import { auth, provider } from '../firebase';
 import MenuItemButton from './MenuItemButton';
+import logoSVG from '../assets/logo.svg';
 
-const SIDE_PANEL_WIDTH = 240;
+const SIDE_PANEL_WIDTH = 160;
 const useStyles = makeStyles((theme) => ({
   drawer: {
     width: SIDE_PANEL_WIDTH,
@@ -21,13 +27,13 @@ const useStyles = makeStyles((theme) => ({
     whiteSpace: 'nowrap',
   },
   drawerPaper: {
-    marginTop: '20px',
+    marginTop: '26px',
     backgroundColor: '#152459',
     padding: '20px 8px',
     color: '#F5F5F5',
     justifyContent: 'space-between',
     alignItems: 'center',
-    height: '92%',
+    height: '93%',
   },
   drawerOpen: {
     width: SIDE_PANEL_WIDTH,
@@ -43,9 +49,9 @@ const useStyles = makeStyles((theme) => ({
       duration: theme.transitions.duration.leavingScreen,
     }),
     overflowX: 'hidden',
-    width: theme.spacing(7) + 1,
+    width: theme.spacing(4) + 1,
     [theme.breakpoints.up('sm')]: {
-      width: theme.spacing(9) + 1,
+      width: theme.spacing(4) + 1,
     },
   },
   menuItem: {
@@ -54,6 +60,12 @@ const useStyles = makeStyles((theme) => ({
   menuItems: {
     display: 'flex',
     flexDirection: 'column',
+  },
+  loginButton: {
+    color: '#fff',
+  },
+  monoLogoImg: {
+    '& img': { padding: '4px', borderRadius: 5, backgroundColor: 'white', width: '30px' },
   },
 }));
 
@@ -82,6 +94,10 @@ function SideBar() {
     auth.signOut().then(dispatch(setUserLogOut()));
   };
 
+  const openSettings = () => {
+    dispatch(openSettingsModal());
+  };
+
   return (
     <Drawer
       variant="permanent"
@@ -104,43 +120,58 @@ function SideBar() {
             imageOnly={!sideBarOpen}
           />
         ) : (
-          <Button onClick={login}>Login</Button>
-        )}
-      </div>
-      <div className={classes.menuItems}>
-        <MenuItemButton
-          className={classes.menuItem}
-          iconComponent={<CgProfile />}
-          iconOnly={!sideBarOpen}
-        >
-          Profile
-        </MenuItemButton>
-        <MenuItemButton
-          className={classes.menuItem}
-          iconComponent={<RiSettings3Line />}
-          iconOnly={!sideBarOpen}
-        >
-          Settings
-        </MenuItemButton>
-        <MenuItemButton
-          className={classes.menuItem}
-          iconComponent={<RiQuestionnaireLine />}
-          iconOnly={!sideBarOpen}
-        >
-          About
-        </MenuItemButton>
-        {isLogged && (
           <MenuItemButton
             className={classes.menuItem}
-            onClickHandler={logout}
-            iconComponent={<RiLogoutBoxLine />}
+            iconComponent={<RiLoginBoxLine />}
             iconOnly={!sideBarOpen}
+            onClickHandler={login}
           >
-            Logout
+            Login
           </MenuItemButton>
         )}
       </div>
-      <div>mono view.</div>
+      <div className={classes.menuItems}>
+        {isLogged && (
+          <>
+            <MenuItemButton
+              className={classes.menuItem}
+              iconComponent={<CgProfile />}
+              iconOnly={!sideBarOpen}
+            >
+              Profile
+            </MenuItemButton>
+            <MenuItemButton
+              className={classes.menuItem}
+              iconComponent={<RiSettings3Line />}
+              iconOnly={!sideBarOpen}
+              onClickHandler={openSettings}
+            >
+              Settings
+            </MenuItemButton>
+            <MenuItemButton
+              className={classes.menuItem}
+              iconComponent={<RiQuestionnaireLine />}
+              iconOnly={!sideBarOpen}
+            >
+              About
+            </MenuItemButton>
+            <MenuItemButton
+              className={classes.menuItem}
+              onClickHandler={logout}
+              iconComponent={<RiLogoutBoxLine />}
+              iconOnly={!sideBarOpen}
+            >
+              Logout
+            </MenuItemButton>
+          </>
+        )}
+      </div>
+      {sideBarOpen && <div className={classes.monoLogo}>mono view.</div>}
+      {!sideBarOpen && (
+        <div className={classes.monoLogoImg}>
+          <img src={logoSVG} alt="logo" />
+        </div>
+      )}
     </Drawer>
   );
 }

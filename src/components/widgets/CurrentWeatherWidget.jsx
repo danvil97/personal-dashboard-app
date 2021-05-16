@@ -1,17 +1,20 @@
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
-import React, { useEffect } from 'react';
-import { CircularProgress, makeStyles } from '@material-ui/core';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import PropTypes from 'prop-types';
+import axios from 'axios';
+import { CircularProgress, IconButton, makeStyles } from '@material-ui/core';
+
 import { MdUpdate } from 'react-icons/md';
 import { RiWindyLine } from 'react-icons/ri';
 import { WiHumidity } from 'react-icons/wi';
 import { FaTemperatureLow } from 'react-icons/fa';
-import {
-  fetchCurrentWeather,
-  selectCurrentWeatherData,
-  selectWeatherStatus,
-} from '../../features/weatherSlice';
-import WidgetBase from '../WidgetBase';
+import { TiLocationArrowOutline } from 'react-icons/ti';
+
+import WidgetToolbar from '../WidgetToolbar';
+import { WeatherAPI } from '../../constants/api';
+import { updateWidget } from '../../features/widgetsSlice';
+import { locationToString } from '../../utils/weatherUtils';
 
 const useStyles = makeStyles(() => ({
   rootLoaded: {
@@ -42,35 +45,102 @@ const useStyles = makeStyles(() => ({
     justifyContent: 'space-between',
   },
 }));
-function CurrentWeatherWidget() {
+function CurrentWeatherWidget({ id, settings }) {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const data = useSelector(selectCurrentWeatherData);
-  const status = useSelector(selectWeatherStatus);
+  const [data, setData] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const updateData = () => {
-    dispatch(fetchCurrentWeather());
+  const setLocation = (location) => {
+    dispatch(
+      updateWidget({
+        id,
+        settings: {
+          ...settings,
+          location,
+        },
+      })
+    );
+  };
+
+  const setLocationUsingGeolocation = () => {
+    navigator.geolocation.getCurrentPosition((position) => {
+      setLocation({ latitude: position.coords.latitude, longitude: position.coords.longitude });
+    });
+  };
+
+  const getCurrentWeather = async () => {
+    if (settings.location) {
+      setIsLoading(true);
+      await axios
+        .get(
+          WeatherAPI.getCurrentWeather(
+            `${settings.location.latitude},${settings.location.longitude}`
+          )
+        )
+        .then((res) => {
+          const weatherData = {
+            temp_c: res.data.current.temp_c,
+            temp_f: res.data.current.temp_f,
+            humidity: res.data.current.humidity,
+            wind_mph: res.data.current.wind_mph,
+            wind_kph: res.data.current.wind_kph,
+            pressure_mb: res.data.current.pressure_mb,
+            pressure_in: res.data.current.pressure_in,
+            feelslike_c: res.data.current.feelslike_c,
+            feelslike_f: res.data.current.feelslike_f,
+            updatedTime: res.data.current.last_updated,
+            location: {
+              name: res.data.location.name,
+              region: res.data.location.region,
+              country: res.data.location.country,
+            },
+            icon: {
+              imgSrc: res.data.current.condition.icon,
+              text: res.data.current.condition.text,
+            },
+          };
+          setData(weatherData);
+        })
+        .catch(() => {
+          // error
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
+    }
   };
 
   useEffect(() => {
-    dispatch(fetchCurrentWeather());
-  }, [dispatch]);
+    getCurrentWeather();
+  }, [settings]);
+
+  const customTools = [
+    <IconButton size="small" onClick={setLocationUsingGeolocation} key="0">
+      <TiLocationArrowOutline />
+    </IconButton>,
+  ];
 
   return (
-    <WidgetBase title="Current Weather">
-      {status.isLoading || !data ? (
-        <CircularProgress />
-      ) : (
+    <div className="commonWidget">
+      <WidgetToolbar id={id} title="Current Weather" customTools={customTools} />
+      {isLoading && <CircularProgress />}
+      {!settings.location && <div>Please update your location settings!</div>}
+      {!isLoading && settings.location && data && (
         <div>
           <div className={classes.rootLoaded}>
-            <img src={data.icon.img} alt={data.icon.alt} />
-            <p className={classes.temperatureText}>{`${data.temp_c}°`}</p>
+            <img src={data.icon.imgSrc} alt={data.icon.text} />
+            <p className={classes.temperatureText}>
+              {settings.prefferedTemp === 'C' ? `${data.temp_c}°С` : `${data.temp_f}°F`}
+            </p>
             <div className={classes.additionalInfo}>
               <div className={classes.property}>
-                <FaTemperatureLow size="1.2em" /> {data.feelslike_c}
+                <FaTemperatureLow size="1.2em" />
+                {settings.prefferedTemp === 'C' ? `${data.feelslike_c}°С` : `${data.feelslike_f}°F`}
               </div>
               <div className={classes.property}>
-                <RiWindyLine size="1.2em" /> {data.wind_kph}
+                <RiWindyLine size="1.2em" />
+                {settings.speedUnits === 'kph' ? `${data.wind_kph} kph` : `${data.wind_mph} mph`}
               </div>
               <div className={classes.property}>
                 <WiHumidity size="1.2em" />
@@ -79,15 +149,53 @@ function CurrentWeatherWidget() {
             </div>
           </div>
           <div>
-            <p>{data.place}</p>
+            <p>{locationToString(data.location)}</p>
             <div className={classes.lastUpdated}>
-              <MdUpdate onClick={updateData} /> {data.updatedTime}
+              <MdUpdate onClick={getCurrentWeather} /> {data.updatedTime}
             </div>
           </div>
         </div>
       )}
-    </WidgetBase>
+    </div>
   );
 }
+
+CurrentWeatherWidget.propTypes = {
+  id: PropTypes.string.isRequired,
+  settings: PropTypes.shape({
+    prefferedTemp: PropTypes.oneOf(['C', 'F']),
+    speedUnits: PropTypes.oneOf(['kph', 'mph']),
+    location: PropTypes.shape({
+      latitude: PropTypes.number,
+      longitude: PropTypes.number,
+    }),
+  }),
+  data: PropTypes.shape({
+    temp_c: PropTypes.number,
+    temp_f: PropTypes.number,
+    humidity: PropTypes.number,
+    wind_mph: PropTypes.number,
+    wind_kph: PropTypes.number,
+    pressure_mb: PropTypes.number,
+    pressure_in: PropTypes.number,
+    feelslike_c: PropTypes.number,
+    feelslike_f: PropTypes.number,
+    updatedTime: PropTypes.string,
+    location: PropTypes.shape({
+      name: PropTypes.string,
+      region: PropTypes.string,
+      country: PropTypes.string,
+    }),
+    icon: PropTypes.shape({
+      text: PropTypes.string,
+      imgSrc: PropTypes.string,
+    }),
+  }),
+};
+
+CurrentWeatherWidget.defaultProps = {
+  data: null,
+  settings: { prefferedTemp: 'C', speedUnits: 'kph', location: null },
+};
 
 export default CurrentWeatherWidget;

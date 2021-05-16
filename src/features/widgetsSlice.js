@@ -9,6 +9,7 @@ const widgetSlice = createSlice({
   name: 'widgets',
   initialState,
   reducers: {
+    //! common widget actions
     addWidget: (state, action) => {
       state.addedWidgets = [...state.addedWidgets, action.payload];
     },
@@ -21,10 +22,71 @@ const widgetSlice = createSlice({
         },
       }));
     },
+    updateWidget: (state, action) => {
+      state.addedWidgets = state.addedWidgets.map((widget) =>
+        widget.id === action.payload.id ? { ...widget, ...action.payload } : widget
+      );
+    },
+    removeWidget: (state, action) => {
+      state.addedWidgets = state.addedWidgets.filter(({ id }) => id !== action.payload.id);
+    },
+    //! todo widget actions
+    addTodo: (state, action) => {
+      const { id, newTodo } = action.payload;
+      const currentWidget = state.addedWidgets.find((widget) => widget.id === id);
+
+      currentWidget.todoList.push({ ...newTodo });
+    },
+    toggleTodo: (state, action) => {
+      const { id, todoId } = action.payload;
+      const currentWidget = state.addedWidgets.find((widget) => widget.id === id);
+      const currentTodo = currentWidget.todoList.find((todo) => todo.id === todoId);
+
+      currentTodo.isCompleted = !currentTodo.isCompleted;
+    },
+    removeTodo: (state, action) => {
+      const { id, todoId } = action.payload;
+      const currentWidget = state.addedWidgets.find((widget) => widget.id === id);
+
+      currentWidget.todoList = currentWidget.todoList.filter((todo) => todo.id !== todoId);
+    },
+    //! pomodoro widget actions
+    changePomodoroSettings: (state, action) => {
+      const { id } = action.payload;
+      const currentWidget = state.addedWidgets.find((widget) => widget.id === id);
+
+      currentWidget.settings = { ...currentWidget.settings, ...action.payload.updatedSettings };
+    },
+    changePomodoroTimers: (state, action) => {
+      const { id } = action.payload;
+      const currentWidget = state.addedWidgets.find((widget) => widget.id === id);
+
+      currentWidget.settings.timers = {
+        ...currentWidget.settings.timers,
+        ...action.payload.updatedTimers,
+      };
+    },
+    changePomodoroCount: (state, action) => {
+      const { id } = action.payload;
+      const currentWidget = state.addedWidgets.find((widget) => widget.id === id);
+
+      currentWidget.settings.pomodoroCount = action.payload.newPomodoroCount;
+    },
   },
 });
 
-export const { addWidget, updateWidgetGridSettings } = widgetSlice.actions;
+export const {
+  addWidget,
+  updateWidgetGridSettings,
+  updateWidget,
+  removeWidget,
+  addTodo,
+  removeTodo,
+  toggleTodo,
+  changePomodoroSettings,
+  changePomodoroTimers,
+  changePomodoroCount,
+} = widgetSlice.actions;
 
 export const selectWidgets = (state) => state.widgets.addedWidgets;
 export const selectWidgetsStatus = (state) => state.widgets.isLoading;
