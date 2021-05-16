@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
@@ -117,7 +116,6 @@ function PomodoroWidget({ id, settings }) {
     dispatch(changePomodoroTimers({ id, updatedTimers }));
   };
 
-  const updateTimer = () => {};
   const customTools = [
     <IconButton size="small" onClick={() => {}} key="0">
       <RiSettings3Line />
