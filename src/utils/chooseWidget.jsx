@@ -4,7 +4,7 @@ import React from 'react';
 import NoteWidget from '../components/widgets/NoteWidget';
 import CurrentWeatherWidget from '../components/widgets/CurrentWeatherWidget';
 import ToDoWidget from '../components/widgets/ToDoWidget/ToDoWidget';
-import PomodoroWidget from '../components/widgets/PomodoroWidget';
+import PomodoroWidget from '../components/widgets/PomodoroWidget/PomodoroWidget';
 
 function chooseWidget(name, props) {
   switch (name) {
