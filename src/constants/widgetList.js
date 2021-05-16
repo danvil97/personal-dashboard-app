@@ -20,6 +20,7 @@ export default [
     settings: {
       pomodoroCount: 0,
       timers: { work: 25, break: 5 },
+      audio: true,
     },
   },
 ];

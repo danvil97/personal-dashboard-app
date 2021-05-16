@@ -66,6 +66,12 @@ const widgetSlice = createSlice({
         ...action.payload.updatedTimers,
       };
     },
+    changePomodoroCount: (state, action) => {
+      const { id } = action.payload;
+      const currentWidget = state.addedWidgets.find((widget) => widget.id === id);
+
+      currentWidget.settings.pomodoroCount = action.payload.newPomodoroCount;
+    },
   },
 });
 
@@ -79,6 +85,7 @@ export const {
   toggleTodo,
   changePomodoroSettings,
   changePomodoroTimers,
+  changePomodoroCount,
 } = widgetSlice.actions;
 
 export const selectWidgets = (state) => state.widgets.addedWidgets;

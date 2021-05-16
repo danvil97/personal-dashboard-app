@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { LinearProgress, makeStyles } from '@material-ui/core';
+import { calculateProgrss } from '../../../utils/pomodoroUtils';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -14,7 +15,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-function Timer({ timer }) {
+function Timer({ timer, total }) {
   const classes = useStyles();
   const timerMinutes = timer.minutes < 10 ? `0${timer.minutes}` : timer.minutes;
   const timerSeconds = timer.seconds < 10 ? `0${timer.seconds}` : timer.seconds;
@@ -24,13 +25,18 @@ function Timer({ timer }) {
       <div className={classes.timerText}>
         {timerMinutes}:{timerSeconds}
       </div>
-      <LinearProgress className={classes.progressBar} variant="determinate" value={50} />
+      <LinearProgress
+        className={classes.progressBar}
+        variant="determinate"
+        value={calculateProgrss(total, timer)}
+      />
     </div>
   );
 }
 
 Timer.propTypes = {
   timer: PropTypes.shape({ minutes: PropTypes.number, seconds: PropTypes.number }).isRequired,
+  total: PropTypes.shape({ minutes: PropTypes.number, seconds: PropTypes.number }).isRequired,
 };
 
 export default Timer;

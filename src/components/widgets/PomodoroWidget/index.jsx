@@ -7,7 +7,7 @@ import { RiSettings3Line } from 'react-icons/ri';
 import { AiOutlinePlus, AiOutlineMinus } from 'react-icons/ai';
 import { MdPlayArrow, MdPause, MdStop } from 'react-icons/md';
 
-import { changePomodoroTimers } from '../../../features/widgetsSlice';
+import { changePomodoroTimers, changePomodoroCount } from '../../../features/widgetsSlice';
 
 import WidgetToolbar from '../../WidgetToolbar';
 import { decreaseByOneSafe } from '../../../utils/pomodoroUtils';
@@ -37,6 +37,10 @@ function PomodoroWidget({ id, settings }) {
   const [timer, setTimer] = useState({ minutes: settings.timers[pomodoroCycle], seconds: 0 });
   const [activeTimer, setActiveTimer] = useState(null);
 
+  const updatePomodoroCount = (newPomodoroCount) => {
+    dispatch(changePomodoroCount({ id, newPomodoroCount }));
+  };
+
   useEffect(() => {
     setTimer({ minutes: settings.timers[pomodoroCycle], seconds: 0 });
   }, [pomodoroCycle, settings]);
@@ -53,18 +57,28 @@ function PomodoroWidget({ id, settings }) {
               seconds: 59,
             }));
           } else {
-            // timer finished
             setIsActive(false);
+            setActiveTimer(null);
+            if (pomodoroCycle === POMODORO_CYCLES.work) {
+              updatePomodoroCount(settings.pomodoroCount === 4 ? 0 : settings.pomodoroCount + 1);
+            }
+            setPomodoroCycle(
+              pomodoroCycle === POMODORO_CYCLES.work ? POMODORO_CYCLES.break : POMODORO_CYCLES.work
+            );
           }
         } else {
-          setActiveTimer((prevTimer) => ({
-            minutes: prevTimer.minutes,
-            seconds: prevTimer.seconds - 1,
-          }));
+          setActiveTimer((prevTimer) =>
+            prevTimer
+              ? {
+                  minutes: prevTimer.minutes,
+                  seconds: prevTimer.seconds - 1,
+                }
+              : null
+          );
         }
       }, 1000);
     }
-  }, [activeTimer]);
+  }, [activeTimer, isActive]);
 
   const switchPomodoroState = (newPomodoroCycle) => () => {
     if (newPomodoroCycle !== pomodoroCycle) setPomodoroCycle(newPomodoroCycle);
@@ -111,8 +125,10 @@ function PomodoroWidget({ id, settings }) {
   ];
 
   const onPlay = () => {
+    if (!activeTimer) {
+      setActiveTimer({ minutes: settings.timers[pomodoroCycle], seconds: 0 });
+    }
     setIsActive(true);
-    setActiveTimer({ minutes: settings.timers[pomodoroCycle], seconds: 0 });
   };
   const onPause = () => {
     setIsActive(false);
@@ -133,6 +149,7 @@ function PomodoroWidget({ id, settings }) {
               variant={pomodoroCycle === POMODORO_CYCLES.work ? 'contained' : 'outlined'}
               color="secondary"
               onClick={switchPomodoroState(POMODORO_CYCLES.work)}
+              disabled={pomodoroCycle === POMODORO_CYCLES.work}
             >
               Work
             </Button>
@@ -141,6 +158,7 @@ function PomodoroWidget({ id, settings }) {
               variant={pomodoroCycle === POMODORO_CYCLES.break ? 'contained' : 'outlined'}
               color="primary"
               onClick={switchPomodoroState(POMODORO_CYCLES.break)}
+              disabled={pomodoroCycle === POMODORO_CYCLES.break}
             >
               Break
             </Button>
@@ -154,7 +172,7 @@ function PomodoroWidget({ id, settings }) {
             <AiOutlineMinus />
           </IconButton>
         </div>
-        <Timer timer={activeTimer || timer} />
+        <Timer timer={activeTimer || timer} total={timer} />
         <div>
           {isActive ? (
             <IconButton onClick={onPause}>
@@ -182,6 +200,7 @@ PomodoroWidget.propTypes = {
     timers: PropTypes.shape({
       work: PropTypes.number,
       break: PropTypes.number,
+      audio: PropTypes.bool,
     }),
   }).isRequired,
 };
