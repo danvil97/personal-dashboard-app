@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { db } from '../firebase';
 
 const initialState = {
   addedWidgets: [],
@@ -9,6 +10,17 @@ const widgetSlice = createSlice({
   name: 'widgets',
   initialState,
   reducers: {
+    //! Firestore sync
+    setWidgetDataFromFirestore: (state) => {
+      state.isLoading = true;
+    },
+    setWidgetDataFromFirestoreSuccess: (state, action) => {
+      state.addedWidgets = action.payload.addedWidgets;
+      state.isLoading = false;
+    },
+    setWidgetDataFromFirestoreFailure: (state) => {
+      state.isLoading = false;
+    },
     //! common widget actions
     addWidget: (state, action) => {
       state.addedWidgets = [...state.addedWidgets, action.payload];
@@ -89,6 +101,9 @@ const widgetSlice = createSlice({
 });
 
 export const {
+  setWidgetDataFromFirestore,
+  setWidgetDataFromFirestoreSuccess,
+  setWidgetDataFromFirestoreFailure,
   addWidget,
   updateWidgetGridSettings,
   updateWidget,
@@ -105,5 +120,33 @@ export const {
 
 export const selectWidgets = (state) => state.widgets.addedWidgets;
 export const selectWidgetsStatus = (state) => state.widgets.isLoading;
+
+export function setWidgetDataFromFirestoreThunk() {
+  return (dispatch, getState) => {
+    const { uid } = getState().user;
+    dispatch(setWidgetDataFromFirestore());
+    const userRef = db.collection('users').doc(uid);
+    console.log(uid);
+    userRef
+      .get()
+      .then((doc) => {
+        if (doc.exists) {
+          console.log(doc.data());
+          dispatch(
+            setWidgetDataFromFirestoreSuccess({
+              addedWidgets: doc.data().addedWidgets.map((widget) => JSON.parse(widget)),
+            })
+          );
+        } else {
+          dispatch(setWidgetDataFromFirestoreFailure());
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+
+        dispatch(setWidgetDataFromFirestoreFailure());
+      });
+  };
+}
 
 export default widgetSlice.reducer;
