@@ -5,7 +5,7 @@ import NoteWidget from '../components/widgets/NoteWidget';
 import CurrentWeatherWidget from '../components/widgets/CurrentWeatherWidget';
 import ToDoWidget from '../components/widgets/ToDoWidget/ToDoWidget';
 import PomodoroWidget from '../components/widgets/PomodoroWidget/PomodoroWidget';
-import QuickLinksWidget from '../components/widgets/QuickLinksWidget';
+import QuickLinksWidget from '../components/widgets/QuickLinksWidget/QuickLinksWidget';
 
 function chooseWidget(name, props) {
   switch (name) {

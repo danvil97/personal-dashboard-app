@@ -27,9 +27,6 @@ export default [
   {
     name: QUICK_LINKS_WIDGET,
     gridSettings: { w: 1, h: 2, minW: 1, minH: 2, maxW: 1, maxH: 4 },
-    links: [
-      { url: 'https://google.com', name: 'Google' },
-      { url: 'https://yandex.ru', name: 'Yandex' },
-    ],
+    links: [],
   },
 ];

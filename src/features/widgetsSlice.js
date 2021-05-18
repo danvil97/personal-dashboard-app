@@ -72,6 +72,19 @@ const widgetSlice = createSlice({
 
       currentWidget.settings.pomodoroCount = action.payload.newPomodoroCount;
     },
+    //! Quick links
+    addQuickLink: (state, action) => {
+      const { id, newLink } = action.payload;
+      const currentWidget = state.addedWidgets.find((widget) => widget.id === id);
+
+      currentWidget.links.push({ ...newLink });
+    },
+    removeQuickLink: (state, action) => {
+      const { id, linkId } = action.payload;
+      const currentWidget = state.addedWidgets.find((widget) => widget.id === id);
+
+      currentWidget.links = currentWidget.links.filter((link) => link.id !== linkId);
+    },
   },
 });
 
@@ -86,6 +99,8 @@ export const {
   changePomodoroSettings,
   changePomodoroTimers,
   changePomodoroCount,
+  addQuickLink,
+  removeQuickLink,
 } = widgetSlice.actions;
 
 export const selectWidgets = (state) => state.widgets.addedWidgets;

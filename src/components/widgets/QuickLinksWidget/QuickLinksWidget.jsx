@@ -4,31 +4,40 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 import { IconButton, makeStyles, TextField } from '@material-ui/core';
+import { TiDeleteOutline } from 'react-icons/ti';
 
-import WidgetToolbar from '../WidgetToolbar';
-import { updateWidget } from '../../features/widgetsSlice';
+import WidgetToolbar from '../../WidgetToolbar';
+import { removeQuickLink, updateWidget } from '../../../features/widgetsSlice';
+import AddLinkPopover from './AddLinkPopover';
 
 const useStyles = makeStyles(() => ({
   linkItem: {
     display: 'flex',
     alignItems: 'center',
     marginBottom: '4px',
+    '&:hover .link-removeButton': { display: 'block' },
   },
   linkFavicon: { marginRight: '8px' },
   linkAnchor: { textDecoration: 'none', color: '#000' },
+  removeButton: { marginLeft: 'auto', display: 'none' },
 }));
 
 function QuickLinksWidget({ id, links }) {
   const dispatch = useDispatch();
   const classes = useStyles();
 
+  const handleLinkRemove = (linkId) => {
+    dispatch(removeQuickLink({ id, linkId }));
+  };
+
+  const customTools = [<AddLinkPopover key={0} id={id} />];
   return (
     <div className="commonWidget">
-      <WidgetToolbar title="Links" id={id} />
+      <WidgetToolbar title="Links" id={id} customTools={customTools} />
       <div className={classes.noteText}>
         {!links.length && <div>You don&apos;t have any links saved yet</div>}
-        {links.map((link, idx) => (
-          <div className={classes.linkItem} key={idx}>
+        {links.map((link) => (
+          <div className={classes.linkItem} key={link.id}>
             <img
               className={classes.linkFavicon}
               height="16"
@@ -44,6 +53,15 @@ function QuickLinksWidget({ id, links }) {
             >
               {link.name}
             </a>
+            <IconButton
+              onClick={() => {
+                handleLinkRemove(link.id);
+              }}
+              size="small"
+              className={`${classes.removeButton} link-removeButton`}
+            >
+              <TiDeleteOutline />
+            </IconButton>
           </div>
         ))}
       </div>
@@ -55,6 +73,7 @@ QuickLinksWidget.propTypes = {
   id: PropTypes.string.isRequired,
   links: PropTypes.arrayOf(
     PropTypes.shape({
+      id: PropTypes.string,
       url: PropTypes.string,
       name: PropTypes.string,
     })
