@@ -18,7 +18,6 @@ import { selectActiveUser, setActiveUser, setUserLogOut } from '../features/user
 import { auth, provider, db } from '../firebase';
 import MenuItemButton from './MenuItemButton';
 import logoSVG from '../assets/logo.svg';
-import FirebaseSyncButtton from '../components/FirebaseSyncButtton';
 
 const SIDE_PANEL_WIDTH = 160;
 const useStyles = makeStyles((theme) => ({
@@ -147,7 +146,6 @@ function SideBar() {
       <div className={classes.menuItems}>
         {isLogged && (
           <>
-            <FirebaseSyncButtton />
             <MenuItemButton
               className={classes.menuItem}
               iconComponent={<CgProfile />}

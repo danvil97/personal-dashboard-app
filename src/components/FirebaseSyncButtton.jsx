@@ -1,28 +1,48 @@
 import React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { Button } from '@material-ui/core';
+import { useDispatch, useSelector } from 'react-redux';
+import { Button, IconButton } from '@material-ui/core';
+import { MdCached, MdCheck, MdSend } from 'react-icons/md';
 
-import { selectWidgets, setWidgetDataFromFirestoreThunk } from '../features/widgetsSlice';
-import { db } from '../firebase';
-import { selectUserId } from '../features/userSlice';
+import {
+  selectWidgetsStatus,
+  sendWidgetDataToFirestoreThunk,
+  setWidgetDataFromFirestoreThunk,
+} from '../features/widgetsSlice';
 
+const ICON_COLORS = {
+  isLoading: '#000099',
+  isModified: '#e81d02',
+  upToDate: '#13a439',
+};
 function FirebaseSyncButtton() {
-  const widgets = useSelector(selectWidgets);
-  const userId = useSelector(selectUserId);
   const dispatch = useDispatch();
+  const widgetsStatus = useSelector(selectWidgetsStatus);
 
   const getData = async () => {
     dispatch(setWidgetDataFromFirestoreThunk());
   };
   const postData = async () => {
-    const response = db
-      .collection('users')
-      .doc(userId)
-      .update({
-        addedWidgets: widgets.map((widget) => JSON.stringify(widget)),
-      });
-    console.log(response);
+    dispatch(sendWidgetDataToFirestoreThunk());
   };
+
+  if (widgetsStatus.isLoading)
+    return (
+      <IconButton size="small">
+        <MdCached color={ICON_COLORS.isLoading} />
+      </IconButton>
+    );
+  if (widgetsStatus.isModified)
+    return (
+      <IconButton onClick={postData} size="small">
+        <MdSend color={ICON_COLORS.isModified} />
+      </IconButton>
+    );
+  if (!widgetsStatus.isModified)
+    return (
+      <IconButton onClick={getData} size="small">
+        <MdCheck color={ICON_COLORS.upToDate} />
+      </IconButton>
+    );
 
   return (
     <>

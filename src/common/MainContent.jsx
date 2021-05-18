@@ -16,6 +16,7 @@ import { addWidget } from '../features/widgetsSlice';
 import WidgetsGrid from '../components/WidgetsGrid';
 import AddWidget from '../components/AddWidget';
 import SettingsModal from '../components/SettingsModal';
+import FirebaseSyncButtton from '../components/FirebaseSyncButtton';
 
 const useStyles = makeStyles(() => ({
   content: {
@@ -30,6 +31,13 @@ const useStyles = makeStyles(() => ({
     background: '#FBF7F7',
     boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.25)',
     marginRight: '8px',
+  },
+  dateWidget: {
+    display: 'flex',
+    alignItems: 'center',
+    '& button': {
+      marginLeft: '12px',
+    },
   },
 }));
 
@@ -61,7 +69,10 @@ function MainContent() {
                 </IconButton>
                 <AddWidget addWidgetFunc={handleAddNewWidget} />
               </div>
-              <CurrentDateWidget />
+              <div className={classes.dateWidget}>
+                <CurrentDateWidget />
+                <FirebaseSyncButtton />
+              </div>
             </ToolBar>
             <WidgetsGrid />
           </>
