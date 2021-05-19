@@ -15,6 +15,7 @@ import WidgetToolbar from '../WidgetToolbar';
 import { WeatherAPI } from '../../constants/api';
 import { updateWidget } from '../../features/widgetsSlice';
 import { locationToString } from '../../utils/weatherUtils';
+import { showNotification } from '../../features/notificationSlice';
 
 const useStyles = makeStyles(() => ({
   rootLoaded: {
@@ -67,6 +68,12 @@ function CurrentWeatherWidget({ id, settings }) {
     navigator.geolocation.getCurrentPosition((position) => {
       setLocation({ latitude: position.coords.latitude, longitude: position.coords.longitude });
     });
+    dispatch(
+      showNotification({
+        message: 'Current Weather widget location was set using geolocation',
+        type: 'success',
+      })
+    );
   };
 
   const getCurrentWeather = async () => {
@@ -101,9 +108,20 @@ function CurrentWeatherWidget({ id, settings }) {
             },
           };
           setData(weatherData);
+          dispatch(
+            showNotification({
+              message: 'Current Weather updated',
+              type: 'success',
+            })
+          );
         })
         .catch(() => {
-          // error
+          dispatch(
+            showNotification({
+              message: 'Current Weather widget couldnt retrive data',
+              type: 'error',
+            })
+          );
         })
         .finally(() => {
           setIsLoading(false);

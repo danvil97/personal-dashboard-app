@@ -17,6 +17,8 @@ import WidgetsGrid from '../components/WidgetsGrid';
 import AddWidget from '../components/AddWidget';
 import SettingsModal from '../components/SettingsModal';
 import FirebaseSyncButtton from '../components/FirebaseSyncButtton';
+import NotificationBar from './NotificationBar';
+import { showNotification } from '../features/notificationSlice';
 
 const useStyles = makeStyles(() => ({
   content: {
@@ -55,6 +57,7 @@ function MainContent() {
 
   const handleAddNewWidget = (widgetObject) => {
     dispatch(addWidget({ id: nanoid(), ...widgetObject }));
+    dispatch(showNotification({ message: `${widgetObject.name} was added`, type: 'success' }));
   };
 
   return (
@@ -80,6 +83,7 @@ function MainContent() {
         <Route path="/about">hi this is about page</Route>
       </Switch>
       <SettingsModal />
+      <NotificationBar />
     </main>
   );
 }

@@ -5,6 +5,7 @@ import { useDispatch } from 'react-redux';
 import { makeStyles } from '@material-ui/core';
 
 import { setWidgetDataFromFirestoreThunk } from './features/widgetsSlice';
+import { setUserSettingsFromFirestoreThunk } from './features/userSettingsSlice';
 import SideBar from './common/SideBar';
 import MainContent from './common/MainContent';
 
@@ -20,6 +21,7 @@ function App() {
 
   useEffect(() => {
     dispatch(setWidgetDataFromFirestoreThunk());
+    dispatch(setUserSettingsFromFirestoreThunk());
   });
 
   return (

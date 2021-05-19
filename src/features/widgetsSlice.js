@@ -1,9 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { db } from '../firebase';
+import { showNotification } from './notificationSlice';
 
 const initialState = {
   addedWidgets: [],
-  lastUpdated: null,
   isModified: false,
   isLoading: false,
 };
@@ -30,7 +30,6 @@ const widgetSlice = createSlice({
     sendWidgetDataToFirestoreSuccess: (state) => {
       state.isLoading = false;
       state.isModified = false;
-      state.lastUpdated = new Date();
     },
     sendWidgetDataToFirestoreFailure: (state) => {
       state.isLoading = false;
@@ -167,12 +166,22 @@ export function setWidgetDataFromFirestoreThunk() {
               addedWidgets: doc.data().addedWidgets.map((widget) => JSON.parse(widget)),
             })
           );
+          dispatch(
+            showNotification({ message: 'Widget layout successfully loaded', type: 'success' })
+          );
         } else {
           dispatch(setWidgetDataFromFirestoreFailure());
+          dispatch(
+            showNotification({
+              message: 'Error while loading widget layout: No user',
+              type: 'error',
+            })
+          );
         }
       })
       .catch(() => {
         dispatch(setWidgetDataFromFirestoreFailure());
+        dispatch(showNotification({ message: 'Error while loading widget layout', type: 'error' }));
       });
   };
 }
@@ -190,9 +199,13 @@ export function sendWidgetDataToFirestoreThunk() {
       })
       .then(() => {
         dispatch(sendWidgetDataToFirestoreSuccess());
+        dispatch(
+          showNotification({ message: 'Widget layout successfully synced', type: 'success' })
+        );
       })
       .catch(() => {
         dispatch(sendWidgetDataToFirestoreFailure());
+        dispatch(showNotification({ message: 'Error while sending widget layout', type: 'error' }));
       });
   };
 }

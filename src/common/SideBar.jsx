@@ -89,7 +89,7 @@ function SideBar() {
         db.collection('users')
           .doc(uid)
           .set({
-            settings: [],
+            settings: { timeFormat: '', dateFormat: '', showDate: true, showTime: true },
             addedWidgets: [],
           })
           .then(() => {

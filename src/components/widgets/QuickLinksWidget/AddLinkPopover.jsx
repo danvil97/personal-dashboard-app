@@ -12,6 +12,7 @@ import { RiCloseLine } from 'react-icons/ri';
 import { flexColumn } from '../../../constants/styleHelpers';
 import IconButtonPopover from '../../../common/IconButtonPopover';
 import { addQuickLink } from '../../../features/widgetsSlice';
+import { showNotification } from '../../../features/notificationSlice';
 
 const useStyles = makeStyles((theme) => ({
   popoverRoot: {
@@ -51,6 +52,7 @@ function AddLinkPopover({ id }) {
     const name = getValues('urlName');
     const url = getValues('url');
     dispatch(addQuickLink({ id, newLink: { id: nanoid(), name, url } }));
+    dispatch(showNotification({ message: 'New link was added', type: 'success' }));
   };
 
   const popoverContentRenderer = ({ onClose }) => (
