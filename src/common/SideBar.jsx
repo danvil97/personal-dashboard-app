@@ -104,12 +104,8 @@ function SideBar() {
             settings: { ...defaultUserSettings },
             addedWidgets: [],
           })
-          .then(() => {
-            console.log('Document successfully written!');
-          })
-          .catch((error) => {
-            console.error('Error writing document: ', error);
-          });
+          .then(() => {})
+          .catch(() => {});
       }
       dispatch(setActiveUser({ userName: name, userPicture: picture, uid }));
     });

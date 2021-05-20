@@ -70,7 +70,6 @@ function SettingsModal() {
 
   const handleClose = () => {
     dispatch(closeSettingsModal());
-    console.log(getValues());
   };
 
   const handleSave = () => {
