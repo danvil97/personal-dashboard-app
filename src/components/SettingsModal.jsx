@@ -127,8 +127,11 @@ function SettingsModal() {
                 <FormControl>
                   <InputLabel id="time-format">Time format</InputLabel>
                   <Select labelId="time-format" {...field}>
-                    <MenuItem value={24}>24h</MenuItem>
-                    <MenuItem value={12}>12h</MenuItem>
+                    <MenuItem value="h:mm:ss a">h:mm:ss a (7:18:28 pm)</MenuItem>
+                    <MenuItem value="HH:mm:ss">h:mm:ss a (14:04:03)</MenuItem>
+                    <MenuItem value="HH:mm">HH:mm (14:04)</MenuItem>
+                    <MenuItem value="h:mma">h:mma (2:04pm)</MenuItem>
+                    <MenuItem value="h:mm A">h:mm A (2:04 PM)</MenuItem>
                   </Select>
                 </FormControl>
               )}
@@ -160,8 +163,11 @@ function SettingsModal() {
                 <FormControl>
                   <InputLabel id="date-format">Date format</InputLabel>
                   <Select labelId="date-format" {...field}>
-                    <MenuItem value="DD-MM-YY">DD-MM-YY</MenuItem>
-                    <MenuItem value="DAY-MON-YYYY">DAY-MON-YYYY</MenuItem>
+                    <MenuItem value="Do MMMM YYYY">Do MMMM YYYY (19th May 2021)</MenuItem>
+                    <MenuItem value="MMM Do YY">MMM Do YY (May 19th 21)</MenuItem>
+                    <MenuItem value="MMMM Do YYYY">MMMM Do YYYY (May 19th 2021)</MenuItem>
+                    <MenuItem value="YYYY-MM-DD">YYYY-MM-DD (2019-06-01)</MenuItem>
+                    <MenuItem value="MMMM Do, YYYY">MMMM Do, YYYY (June 1st, 2019)</MenuItem>
                   </Select>
                 </FormControl>
               )}

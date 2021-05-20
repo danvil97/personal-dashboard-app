@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import clsx from 'clsx';
@@ -18,6 +18,11 @@ import { selectActiveUser, setActiveUser, setUserLogOut } from '../features/user
 import { auth, provider, db } from '../firebase';
 import MenuItemButton from './MenuItemButton';
 import logoSVG from '../assets/logo.svg';
+import { setWidgetDataFromFirestoreThunk } from '../features/widgetsSlice';
+import {
+  defaultUserSettings,
+  setUserSettingsFromFirestoreThunk,
+} from '../features/userSettingsSlice';
 
 const SIDE_PANEL_WIDTH = 160;
 const useStyles = makeStyles((theme) => ({
@@ -79,6 +84,13 @@ function SideBar() {
   const sideBarOpen = get(sideBarSettings, 'isOpen', false);
   const isLogged = get(userProfile, 'isLogged', false);
 
+  useEffect(() => {
+    if (isLogged) {
+      dispatch(setWidgetDataFromFirestoreThunk());
+      dispatch(setUserSettingsFromFirestoreThunk());
+    }
+  });
+
   const login = () => {
     auth.signInWithPopup(provider).then((result) => {
       const userProfileResult = get(result, ['additionalUserInfo', 'profile']);
@@ -89,7 +101,7 @@ function SideBar() {
         db.collection('users')
           .doc(uid)
           .set({
-            settings: { timeFormat: '', dateFormat: '', showDate: true, showTime: true },
+            settings: { ...defaultUserSettings },
             addedWidgets: [],
           })
           .then(() => {

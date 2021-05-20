@@ -2,14 +2,17 @@ import { createSlice } from '@reduxjs/toolkit';
 import { db } from '../firebase';
 import { showNotification } from './notificationSlice';
 
+export const defaultUserSettings = {
+  timeFormat: 'HH:mm:ss',
+  dateFormat: 'Do MMMM YYYY',
+  showDate: true,
+  showTime: true,
+  showDay: false,
+  language: 'ENG',
+};
 const initialState = {
   settings: {
-    timeFormat: 24,
-    dateFormat: 'DD-MM-YY',
-    showDate: true,
-    showTime: true,
-    showDay: false,
-    language: 'ENG',
+    ...defaultUserSettings,
   },
   isLoading: false,
 };
@@ -52,6 +55,10 @@ export const {
 } = userSettingsSlice.actions;
 
 export const selectUserSettings = (state) => state.userSettings.settings;
+export const selectDateTimeUserSettings = (state) => {
+  const { timeFormat, dateFormat, showDate, showTime, showDay } = state.userSettings.settings;
+  return { timeFormat, dateFormat, showDate, showTime, showDay };
+};
 
 export function setUserSettingsFromFirestoreThunk() {
   return (dispatch, getState) => {
