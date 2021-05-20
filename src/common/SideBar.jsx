@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import clsx from 'clsx';
@@ -15,9 +15,14 @@ import { openSettingsModal, selectSideBarSettings } from '../features/appSlice';
 import UserProfilePreview from '../components/UserProfilePreview';
 import { selectActiveUser, setActiveUser, setUserLogOut } from '../features/userSlice';
 
-import { auth, provider } from '../firebase';
+import { auth, provider, db } from '../firebase';
 import MenuItemButton from './MenuItemButton';
 import logoSVG from '../assets/logo.svg';
+import { setWidgetDataFromFirestoreThunk } from '../features/widgetsSlice';
+import {
+  defaultUserSettings,
+  setUserSettingsFromFirestoreThunk,
+} from '../features/userSettingsSlice';
 
 const SIDE_PANEL_WIDTH = 160;
 const useStyles = makeStyles((theme) => ({
@@ -79,14 +84,34 @@ function SideBar() {
   const sideBarOpen = get(sideBarSettings, 'isOpen', false);
   const isLogged = get(userProfile, 'isLogged', false);
 
+  useEffect(() => {
+    if (isLogged) {
+      dispatch(setWidgetDataFromFirestoreThunk());
+      dispatch(setUserSettingsFromFirestoreThunk());
+    }
+  });
+
   const login = () => {
     auth.signInWithPopup(provider).then((result) => {
-      const userProfileResult = get(result, ['additionalUserInfo', 'profile'], {
-        name: null,
-        picture: null,
-      });
+      const userProfileResult = get(result, ['additionalUserInfo', 'profile']);
+      const uid = get(result, ['user', 'uid']);
       const { name, picture } = userProfileResult;
-      dispatch(setActiveUser({ userName: name, userPicture: picture }));
+
+      if (result.additionalUserInfo.isNewUser) {
+        db.collection('users')
+          .doc(uid)
+          .set({
+            settings: { ...defaultUserSettings },
+            addedWidgets: [],
+          })
+          .then(() => {
+            console.log('Document successfully written!');
+          })
+          .catch((error) => {
+            console.error('Error writing document: ', error);
+          });
+      }
+      dispatch(setActiveUser({ userName: name, userPicture: picture, uid }));
     });
   };
 

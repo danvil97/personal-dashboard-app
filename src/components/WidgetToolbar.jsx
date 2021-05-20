@@ -22,7 +22,7 @@ const useStyles = makeStyles(() => ({
     fontSize: '16px',
   },
   widgetTools: {
-    display: 'none',
+    // display: 'none',
   },
 }));
 

@@ -16,6 +16,9 @@ import { addWidget } from '../features/widgetsSlice';
 import WidgetsGrid from '../components/WidgetsGrid';
 import AddWidget from '../components/AddWidget';
 import SettingsModal from '../components/SettingsModal';
+import FirebaseSyncButtton from '../components/FirebaseSyncButtton';
+import NotificationBar from './NotificationBar';
+import { showNotification } from '../features/notificationSlice';
 
 const useStyles = makeStyles(() => ({
   content: {
@@ -30,6 +33,13 @@ const useStyles = makeStyles(() => ({
     background: '#FBF7F7',
     boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.25)',
     marginRight: '8px',
+  },
+  dateWidget: {
+    display: 'flex',
+    alignItems: 'center',
+    '& button': {
+      marginLeft: '12px',
+    },
   },
 }));
 
@@ -47,6 +57,7 @@ function MainContent() {
 
   const handleAddNewWidget = (widgetObject) => {
     dispatch(addWidget({ id: nanoid(), ...widgetObject }));
+    dispatch(showNotification({ message: `${widgetObject.name} was added`, type: 'success' }));
   };
 
   return (
@@ -61,7 +72,10 @@ function MainContent() {
                 </IconButton>
                 <AddWidget addWidgetFunc={handleAddNewWidget} />
               </div>
-              <CurrentDateWidget />
+              <div className={classes.dateWidget}>
+                <CurrentDateWidget />
+                <FirebaseSyncButtton />
+              </div>
             </ToolBar>
             <WidgetsGrid />
           </>
@@ -69,6 +83,7 @@ function MainContent() {
         <Route path="/about">hi this is about page</Route>
       </Switch>
       <SettingsModal />
+      <NotificationBar />
     </main>
   );
 }

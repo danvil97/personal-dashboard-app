@@ -9,6 +9,7 @@ import { FormControl, IconButton, makeStyles, OutlinedInput } from '@material-ui
 import WidgetToolbar from '../../WidgetToolbar';
 import { addTodo, toggleTodo, removeTodo } from '../../../features/widgetsSlice';
 import ToDoItem from './ToDoItem';
+import { showNotification } from '../../../features/notificationSlice';
 
 const useStyles = makeStyles(() => ({}));
 
@@ -31,6 +32,12 @@ function ToDoWidget({ id, todoList }) {
     dispatch(addTodo({ id, newTodo }));
     setIsEditing(false);
     setNewTodoText('');
+    dispatch(
+      showNotification({
+        message: 'New todo item was created',
+        type: 'success',
+      })
+    );
   };
 
   const onToggleTodo = (todoId) => () => {
@@ -39,6 +46,12 @@ function ToDoWidget({ id, todoList }) {
 
   const onRemove = (todoId) => () => {
     dispatch(removeTodo({ id, todoId }));
+    dispatch(
+      showNotification({
+        message: 'Todo item was removed',
+        type: 'success',
+      })
+    );
   };
 
   const customTools = [

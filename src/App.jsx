@@ -1,6 +1,7 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core';
 import { BrowserRouter } from 'react-router-dom';
+
+import { makeStyles } from '@material-ui/core';
 
 import SideBar from './common/SideBar';
 import MainContent from './common/MainContent';

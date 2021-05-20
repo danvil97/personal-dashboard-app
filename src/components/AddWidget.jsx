@@ -26,6 +26,7 @@ function AddWidget({ addWidgetFunc }) {
 
   const handleAddNewWidget = (widget) => {
     addWidgetFunc(widget);
+
     handleClose();
   };
   return (
