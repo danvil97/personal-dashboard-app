@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import clsx from 'clsx';
-import { get } from 'lodash';
 import {
   RiLogoutBoxLine,
   RiLoginBoxLine,
@@ -81,8 +80,8 @@ function SideBar() {
   const sideBarSettings = useSelector(selectSideBarSettings);
   const userProfile = useSelector(selectActiveUser);
 
-  const sideBarOpen = get(sideBarSettings, 'isOpen', false);
-  const isLogged = get(userProfile, 'isLogged', false);
+  const sideBarOpen = sideBarSettings.isOpen;
+  const { isLogged } = userProfile;
 
   useEffect(() => {
     if (isLogged) {
@@ -93,8 +92,8 @@ function SideBar() {
 
   const login = () => {
     auth.signInWithPopup(provider).then((result) => {
-      const userProfileResult = get(result, ['additionalUserInfo', 'profile']);
-      const uid = get(result, ['user', 'uid']);
+      const userProfileResult = result.additionalUserInfo.profile;
+      const { uid } = result.user;
       const { name, picture } = userProfileResult;
 
       if (result.additionalUserInfo.isNewUser) {

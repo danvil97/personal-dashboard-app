@@ -1,17 +1,29 @@
+/* eslint-disable react/jsx-props-no-spreading */
+/* eslint-disable no-unused-vars */
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 import axios from 'axios';
-import { CircularProgress, IconButton, makeStyles } from '@material-ui/core';
+import {
+  Button,
+  CircularProgress,
+  FormControl,
+  IconButton,
+  InputLabel,
+  makeStyles,
+  MenuItem,
+  Select,
+  Typography,
+} from '@material-ui/core';
+import { Controller, useForm } from 'react-hook-form';
 
 import { MdUpdate } from 'react-icons/md';
-import { RiWindyLine } from 'react-icons/ri';
-import { WiHumidity } from 'react-icons/wi';
-import { FaTemperatureLow } from 'react-icons/fa';
+import { RiWindyLine, RiWaterFlashLine, RiTempColdLine } from 'react-icons/ri';
 import { TiLocationArrowOutline } from 'react-icons/ti';
 
 import WidgetToolbar from '../WidgetToolbar';
+import WidgetSettingsPopover from './WidgetSettingsPopover';
 import { WeatherAPI } from '../../constants/api';
 import { updateWidget } from '../../features/widgetsSlice';
 import { locationToString } from '../../utils/weatherUtils';
@@ -39,11 +51,17 @@ const useStyles = makeStyles(() => ({
   additionalInfo: {
     display: 'flex',
     flexDirection: 'column',
+    alignItems: 'stretch  ',
   },
   property: {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
+  },
+  settingsRoot: { display: 'flex', flexDirection: 'column' },
+  settingsItem: {
+    minWidth: '140px',
+    marginBottom: '12px',
   },
 }));
 function CurrentWeatherWidget({ id, settings }) {
@@ -51,6 +69,7 @@ function CurrentWeatherWidget({ id, settings }) {
   const dispatch = useDispatch();
   const [data, setData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const { control, getValues } = useForm();
 
   const setLocation = (location) => {
     dispatch(
@@ -133,10 +152,54 @@ function CurrentWeatherWidget({ id, settings }) {
     getCurrentWeather();
   }, [settings]);
 
+  const handleSettingsSave = () => {
+    const values = getValues();
+    dispatch(updateWidget({ id, settings: { ...settings, ...values } }));
+  };
+
+  const settingsContent = (
+    <>
+      <Typography gutterBottom className={classes.settingsSectionTitle}>
+        Weather settings
+      </Typography>
+      <div className={classes.settingsRoot}>
+        <Controller
+          name="prefferedTemp"
+          control={control}
+          defaultValue={settings.prefferedTemp}
+          render={({ field }) => (
+            <FormControl className={classes.settingsItem}>
+              <InputLabel id="preffered-temp">Temperature units</InputLabel>
+              <Select labelId="preffered-temp" {...field}>
+                <MenuItem value="C">C</MenuItem>
+                <MenuItem value="F">F</MenuItem>
+              </Select>
+            </FormControl>
+          )}
+        />
+        <Controller
+          name="speedUnits"
+          control={control}
+          defaultValue={settings.speedUnits}
+          render={({ field }) => (
+            <FormControl className={classes.settingsItem}>
+              <InputLabel id="speed-units">Wind speed units</InputLabel>
+              <Select labelId="speed-units" {...field}>
+                <MenuItem value="kph">kph</MenuItem>
+                <MenuItem value="mph">mph</MenuItem>
+              </Select>
+            </FormControl>
+          )}
+        />
+      </div>
+    </>
+  );
+
   const customTools = [
     <IconButton size="small" onClick={setLocationUsingGeolocation} key="0">
       <TiLocationArrowOutline />
     </IconButton>,
+    <WidgetSettingsPopover onSave={handleSettingsSave}>{settingsContent}</WidgetSettingsPopover>,
   ];
 
   return (
@@ -153,7 +216,7 @@ function CurrentWeatherWidget({ id, settings }) {
             </p>
             <div className={classes.additionalInfo}>
               <div className={classes.property}>
-                <FaTemperatureLow size="1.2em" />
+                <RiTempColdLine size="1.2em" />
                 {settings.prefferedTemp === 'C' ? `${data.feelslike_c}°С` : `${data.feelslike_f}°F`}
               </div>
               <div className={classes.property}>
@@ -161,7 +224,7 @@ function CurrentWeatherWidget({ id, settings }) {
                 {settings.speedUnits === 'kph' ? `${data.wind_kph} kph` : `${data.wind_mph} mph`}
               </div>
               <div className={classes.property}>
-                <WiHumidity size="1.2em" />
+                <RiWaterFlashLine size="1.2em" />
                 {data.humidity}%
               </div>
             </div>

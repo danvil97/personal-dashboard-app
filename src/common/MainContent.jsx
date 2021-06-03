@@ -2,7 +2,6 @@ import React from 'react';
 import { nanoid } from '@reduxjs/toolkit';
 import { useDispatch, useSelector } from 'react-redux';
 import { Route, Switch } from 'react-router-dom';
-import { get } from 'lodash';
 import { makeStyles, IconButton } from '@material-ui/core';
 import { RiMenuFoldLine, RiMenuUnfoldLine } from 'react-icons/ri';
 
@@ -49,7 +48,7 @@ function MainContent() {
 
   const sideBarSettings = useSelector(selectSideBarSettings);
 
-  const sideBarOpen = get(sideBarSettings, 'isOpen');
+  const sideBarOpen = sideBarSettings.isOpen;
 
   const handleSideBarToggle = () => {
     dispatch(toggleSideBarOpen());

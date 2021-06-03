@@ -1,10 +1,17 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
-import { IconButton, Popover } from '@material-ui/core';
+import { Button, IconButton, makeStyles, Popover } from '@material-ui/core';
 import { RiSettings3Line } from 'react-icons/ri';
 
-function WidgetSettingsPopover({ children }) {
+const useStyles = makeStyles((theme) => ({
+  popoverContent: {
+    padding: theme.spacing(2),
+  },
+}));
+
+function WidgetSettingsPopover({ children, onSave }) {
+  const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState(null);
 
   const handleClick = (event) => {
@@ -12,6 +19,10 @@ function WidgetSettingsPopover({ children }) {
   };
 
   const handleClose = () => {
+    setAnchorEl(null);
+  };
+  const handleSave = () => {
+    onSave();
     setAnchorEl(null);
   };
 
@@ -33,17 +44,22 @@ function WidgetSettingsPopover({ children }) {
           horizontal: 'left',
         }}
       >
-        {children}
+        <div className={classes.popoverContent}>
+          {children}
+          <Button onClick={handleSave}>Save settings</Button>
+        </div>
       </Popover>
     </>
   );
 }
 WidgetSettingsPopover.propTypes = {
   children: PropTypes.oneOfType([PropTypes.element, PropTypes.string]),
+  onSave: PropTypes.func,
 };
 
 WidgetSettingsPopover.defaultProps = {
   children: null,
+  onSave: () => {},
 };
 
 export default WidgetSettingsPopover;
